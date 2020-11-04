@@ -27,6 +27,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private Vector2 verticalScroll;
 
         private GameObjectBrush currentBrush;
+        private Tool previousTool;
 
         private void OnEnable()
         {
@@ -100,8 +101,29 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             // currentBrush.transform.position = p;
             
             var ray = HandleUtility.GUIPointToWorldRay(p);
-            currentBrush.transform.position = ray.origin;
+            var position = ray.origin;
+            position.z = 0;
+            currentBrush.transform.position = position;
             // Handles.DrawLine(btn.transform.position + Vector3.up, mousePosition);
+
+            if (Event.current.rawType == EventType.MouseDown)
+            {
+                var instance = PrefabUtility.InstantiatePrefab(currentBrush.prefab) as GameObject;
+                instance.transform.position = currentBrush.transform.position;
+                Event.current.Use();
+            }
+            
+            // if (Event.current.rawType == EventType.MouseDrag)
+            // {
+            //     var instance = PrefabUtility.InstantiatePrefab(currentBrush.prefab) as GameObject;
+            //     instance.transform.position = currentBrush.transform.position;
+            //     Event.current.Use();
+            // }
+            
+            if (Event.current.rawType == EventType.MouseUp)
+            {
+                Event.current.Use();
+            }
         }
 
         private void OnFocus()
@@ -118,7 +140,10 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private void ReloadPalette()
         {
-            var objects = AssetDatabaseExt.FindPrefabs<Renderer>();
+            var objects = AssetDatabaseExt.FindPrefabs<Renderer>(AssetDatabaseExt.FindOptions.None, new []
+            {
+                "Assets/Palette"
+            });
 
             entries.Clear();
             
@@ -223,6 +248,8 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             if (currentBrush.preview != null)
                 DestroyImmediate(currentBrush.preview);
             currentBrush.preview = null;
+            
+            UnityEditor.Tools.current = previousTool;
         }
 
         private void SelectBrushObject(GameObject prefab)
@@ -232,6 +259,9 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             currentBrush.preview.transform.localPosition= new Vector3();
             currentBrush.preview.hideFlags = HideFlags.NotEditable;
             currentBrush.prefab.tag = "EditorOnly";
+
+            previousTool = UnityEditor.Tools.current;
+            UnityEditor.Tools.current = Tool.None;
         }
     }
 }
