@@ -1,1 +1,1 @@
-GameObject Palette + Brush
+GameObject palette + Brush for 2d Games
