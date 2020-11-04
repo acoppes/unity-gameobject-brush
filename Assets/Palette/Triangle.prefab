@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1743154691015626664}
   - component: {fileID: 2179559636497464097}
   m_Layer: 0
-  m_Name: Circle 2
-  m_TagString: Untagged
+  m_Name: Triangle
+  m_TagString: EditorOnly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
