@@ -25,9 +25,10 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private readonly List<PaletteEntry> entries = new List<PaletteEntry>();
 
         private Vector2 verticalScroll;
+        private Tool previousTool;
 
         private GameObjectBrush currentBrush;
-        private Tool previousTool;
+        private PaletteEntry selectedEntry;
 
         private void OnEnable()
         {
@@ -37,7 +38,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             EditorSceneManager.sceneOpened += OnSceneOpened;
 
             DestroyPreviousBrushes();
-            CreateActiveBrush();
+            // CreateActiveBrush();
         }
 
         private void OnDisable()
@@ -58,8 +59,9 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         {
             if (mode == OpenSceneMode.Single)
             {
+                DeselectPaletteEntry();
                 DestroyPreviousBrushes();
-                CreateActiveBrush();
+                // CreateActiveBrush();
             }
         }
 
@@ -75,6 +77,15 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             if (root != null)
             {
                 currentBrush.parent = root.transform;
+            }
+        }
+
+        private void DestroyActiveBrush()
+        {
+            if (currentBrush != null)
+            {
+                DestroyImmediate(currentBrush.gameObject);
+                currentBrush = null;
             }
         }
 
@@ -99,10 +110,9 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private void DuringSceneView(SceneView sceneView)
         {
-            if (currentBrush == null || currentBrush.prefab == null)
+            if (selectedEntry == null || currentBrush == null)
                 return;
-            Debug.Log("During Scene View");
-
+            
             var p = Event.current.mousePosition;
             // currentBrush.transform.position = p;
             
@@ -114,7 +124,8 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
             if (Event.current.rawType == EventType.MouseDown && Event.current.button == 0)
             {
-                var instance = PrefabUtility.InstantiatePrefab(currentBrush.prefab) as GameObject;
+                // TODO: this is brush logic...
+                var instance = PrefabUtility.InstantiatePrefab(selectedEntry.prefab) as GameObject;
                 if (currentBrush.parent != null)
                     instance.transform.parent = currentBrush.parent;
                 instance.transform.position = currentBrush.transform.position;
@@ -201,16 +212,16 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     fixedHeight = previewSize.y
                 };
 
-                var isSelected = currentBrush.prefab == entry.prefab;
+                var isSelected = selectedEntry == entry;
 
                 if (GUILayout.Button(previewContent, guiStyle))
                 {
                     if (isSelected)
-                        DeselectBrushObject();
+                        DeselectPaletteEntry();
                     else
                     {
-                        DeselectBrushObject();
-                        SelectBrushObject(entry.prefab);
+                        DeselectPaletteEntry();
+                        SelectBrushObject(entry);
                     }
                 }
                 
@@ -248,31 +259,36 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             GUILayout.EndVertical();
         }
 
-        private void DeselectBrushObject()
+        private void DeselectPaletteEntry()
         {
-            currentBrush.prefab = null;
-            
-            // var childCount = currentBrush.transform.childCount;
-            // for (var i = 0; i < childCount; i++)
-            // {
-            //     var c = currentBrush.transform.GetChild(i);
-            //     DestroyImmediate(c.gameObject);
-            // }
-            
-            if (currentBrush.preview != null)
-                DestroyImmediate(currentBrush.preview);
-            currentBrush.preview = null;
-            
+            // currentBrush.prefab = null;
+            //
+            // // var childCount = currentBrush.transform.childCount;
+            // // for (var i = 0; i < childCount; i++)
+            // // {
+            // //     var c = currentBrush.transform.GetChild(i);
+            // //     DestroyImmediate(c.gameObject);
+            // // }
+            //
+            // if (currentBrush.preview != null)
+            //     DestroyImmediate(currentBrush.preview);
+            // currentBrush.preview = null;
+
+            DestroyActiveBrush();
+            selectedEntry = null;
             UnityEditor.Tools.current = previousTool;
         }
 
-        private void SelectBrushObject(GameObject prefab)
+        private void SelectBrushObject(PaletteEntry entry)
         {
-            currentBrush.prefab = prefab;
-            currentBrush.preview = Instantiate(prefab, currentBrush.transform);
+            selectedEntry = entry;
+            
+            CreateActiveBrush();
+            
+            currentBrush.preview = Instantiate(entry.prefab, currentBrush.transform);
             currentBrush.preview.transform.localPosition= new Vector3();
             currentBrush.preview.hideFlags = HideFlags.NotEditable;
-            currentBrush.prefab.tag = "EditorOnly";
+            currentBrush.preview.tag = "EditorOnly";
 
             previousTool = UnityEditor.Tools.current;
             UnityEditor.Tools.current = Tool.None;
