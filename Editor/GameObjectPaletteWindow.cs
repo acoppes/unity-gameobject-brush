@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace Gemserk.Tools.ObjectPalette.Editor
@@ -35,6 +36,12 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             DestroyPreviousBrushes();
             CreateActiveBrush();
         }
+        
+        private void OnDisable()
+        {
+            SceneView.duringSceneGui -= DuringSceneView;
+            DestroyPreviousBrushes();
+        }
 
         private void CreateActiveBrush()
         {
@@ -47,17 +54,21 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private void DestroyPreviousBrushes()
         {
-            var previousBrushes = FindObjectsOfType<GameObjectBrush>();
-            foreach (var previousBrush in previousBrushes)
+            var scenes = EditorSceneManager.sceneCount;
+            for (int i = 0; i < scenes; i++)
             {
-                Destroy(previousBrush.gameObject);
+                var scene = EditorSceneManager.GetSceneAt(i);
+                var rootObjects = scene.GetRootGameObjects();
+                foreach (var rootObject in rootObjects)
+                {
+                    var hangingBrushes = rootObject.GetComponentsInChildren<GameObjectBrush>();
+                    foreach (var hangingBrush in hangingBrushes)
+                    {
+                        DestroyImmediate(hangingBrush.gameObject);
+                    }
+                }
             }
             currentBrush = null;
-        }
-
-        private void OnDisable()
-        {
-            SceneView.duringSceneGui -= DuringSceneView;
         }
 
         private void DuringSceneView(SceneView sceneView)
@@ -70,11 +81,13 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private void OnFocus()
         {
             ReloadPalette();
+            // CreateActiveBrush();
         }
 
         private void OnLostFocus()
         {
             // Unselect brush tool
+            // DeselectBrushObject();
         }
 
         private void ReloadPalette()
