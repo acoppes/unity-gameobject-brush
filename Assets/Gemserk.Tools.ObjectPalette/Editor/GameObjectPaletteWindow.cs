@@ -19,6 +19,13 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             public string name;
             public GameObject prefab;
             public Texture preview;
+
+            public override bool Equals(object obj)
+            {
+                if (obj is PaletteEntry e)
+                    return e.prefab.Equals(prefab);
+                return base.Equals(obj);
+            }
         }
         
 
@@ -212,7 +219,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     fixedHeight = previewSize.y
                 };
 
-                var isSelected = selectedEntry == entry;
+                var isSelected = entry.Equals(selectedEntry);
 
                 if (GUILayout.Button(previewContent, guiStyle))
                 {
