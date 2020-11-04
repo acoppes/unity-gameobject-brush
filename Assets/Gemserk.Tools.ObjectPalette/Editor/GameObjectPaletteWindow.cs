@@ -70,6 +70,12 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 hideFlags = HideFlags.NotEditable, tag = "EditorOnly"
             };
             currentBrush = brushObject.AddComponent<GameObjectBrush>();
+
+            var root = FindObjectOfType<BrushRoot>();
+            if (root != null)
+            {
+                currentBrush.parent = root.transform;
+            }
         }
 
         private void DestroyPreviousBrushes()
@@ -106,9 +112,11 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             currentBrush.transform.position = position;
             // Handles.DrawLine(btn.transform.position + Vector3.up, mousePosition);
 
-            if (Event.current.rawType == EventType.MouseDown)
+            if (Event.current.rawType == EventType.MouseDown && Event.current.button == 0)
             {
                 var instance = PrefabUtility.InstantiatePrefab(currentBrush.prefab) as GameObject;
+                if (currentBrush.parent != null)
+                    instance.transform.parent = currentBrush.parent;
                 instance.transform.position = currentBrush.transform.position;
                 Event.current.Use();
             }
@@ -120,10 +128,10 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             //     Event.current.Use();
             // }
             
-            if (Event.current.rawType == EventType.MouseUp)
-            {
-                Event.current.Use();
-            }
+            // if (Event.current.rawType == EventType.MouseUp)
+            // {
+            //     Event.current.Use();
+            // }
         }
 
         private void OnFocus()
@@ -207,6 +215,12 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 }
                 
                 var r = GUILayoutUtility.GetLastRect();
+
+                if (entry.preview == null)
+                {
+                    // If preview was unloaded by unity, regenerate it
+                    entry.preview = AssetPreview.GetAssetPreview(entry.prefab);
+                }
 
                 GUI.DrawTexture(r, entry.preview, ScaleMode.StretchToFill);
                 EditorGUI.DropShadowLabel(new Rect(r.x, r.y, r.width, r.height - 0.0f), entry.name, 

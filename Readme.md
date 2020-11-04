@@ -2,8 +2,8 @@ GameObject palette + Brush for 2d Games
 
 TODO:
 
-* Paint game objects on scene.
-* Paint in BrushRoot if any.
+* Brush logic for painting
+  - Mouse drag + repeat, etc.
 * Erase tool.
 * Undo.
 * Settings (asset) to configure prefab folders.
