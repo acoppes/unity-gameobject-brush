@@ -74,3 +74,5 @@ Assets/Resources/commits.txt.meta
 Assets/Plugins/Editor/RelationsInspector/Packages.meta
 Assets/Plugins/Editor/RelationsInspector/LayoutCaches.meta
 Assets/AddressableAssetsData/Windows.meta
+
+TempAssets/
