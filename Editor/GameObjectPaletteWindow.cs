@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -47,7 +46,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         {
             var brushObject = new GameObject("~BrushObject")
             {
-                hideFlags = HideFlags.DontSave
+                hideFlags = HideFlags.NotEditable, tag = "EditorOnly"
             };
             currentBrush = brushObject.AddComponent<GameObjectBrush>();
         }
@@ -76,6 +75,13 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             if (currentBrush == null || currentBrush.prefab == null)
                 return;
             Debug.Log("During Scene View");
+
+            var p = Event.current.mousePosition;
+            // currentBrush.transform.position = p;
+            
+            var ray = HandleUtility.GUIPointToWorldRay(p);
+            currentBrush.transform.position = ray.origin;
+            // Handles.DrawLine(btn.transform.position + Vector3.up, mousePosition);
         }
 
         private void OnFocus()
@@ -148,8 +154,11 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 {
                     if (isSelected)
                         DeselectBrushObject();
-                    else 
+                    else
+                    {
+                        DeselectBrushObject();
                         SelectBrushObject(entry.prefab);
+                    }
                 }
                 
                 var r = GUILayoutUtility.GetLastRect();
@@ -183,13 +192,26 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private void DeselectBrushObject()
         {
             currentBrush.prefab = null;
-            // TODO: destroy preview object?
+            
+            // var childCount = currentBrush.transform.childCount;
+            // for (var i = 0; i < childCount; i++)
+            // {
+            //     var c = currentBrush.transform.GetChild(i);
+            //     DestroyImmediate(c.gameObject);
+            // }
+            
+            if (currentBrush.preview != null)
+                DestroyImmediate(currentBrush.preview);
+            currentBrush.preview = null;
         }
 
         private void SelectBrushObject(GameObject prefab)
         {
             currentBrush.prefab = prefab;
-            // TODO: create brush object...
+            currentBrush.preview = Instantiate(prefab, currentBrush.transform);
+            currentBrush.preview.transform.localPosition= new Vector3();
+            currentBrush.preview.hideFlags = HideFlags.NotEditable;
+            currentBrush.prefab.tag = "EditorOnly";
         }
     }
 }
