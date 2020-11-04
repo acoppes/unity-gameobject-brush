@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Gemserk.Tools.ObjectPalette.Editor
 {
@@ -12,7 +13,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         {
             GetWindow(typeof(GameObjectPaletteWindow), false, "Object Palette");
         }
-        
+
         private class PaletteEntry
         {
             public string name;
@@ -31,15 +32,34 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         {
             ReloadPalette();
             SceneView.duringSceneGui += DuringSceneView;
+            EditorSceneManager.sceneClosed += OnSceneClosed;
+            EditorSceneManager.sceneOpened += OnSceneOpened;
 
             DestroyPreviousBrushes();
             CreateActiveBrush();
         }
-        
+
         private void OnDisable()
         {
             SceneView.duringSceneGui -= DuringSceneView;
+            EditorSceneManager.sceneClosed -= OnSceneClosed;
+            EditorSceneManager.sceneOpened -= OnSceneOpened;
+
             DestroyPreviousBrushes();
+        }
+        
+        private void OnSceneClosed(Scene scene)
+        {
+            
+        }
+
+        private void OnSceneOpened(Scene scene, OpenSceneMode mode)
+        {
+            if (mode == OpenSceneMode.Single)
+            {
+                DestroyPreviousBrushes();
+                CreateActiveBrush();
+            }
         }
 
         private void CreateActiveBrush()
