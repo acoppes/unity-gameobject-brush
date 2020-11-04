@@ -1,0 +1,17 @@
+{
+    "name": "Gemserk.Tools.ObjectPalette.Editor",
+    "references": [
+        "GUID:cbc3abc265d8a8042b291ebe4ce1853b"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
