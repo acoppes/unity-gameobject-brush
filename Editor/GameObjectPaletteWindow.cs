@@ -25,14 +25,56 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private Vector2 verticalScroll;
 
+        private GameObjectBrush currentBrush;
+
         private void OnEnable()
         {
             ReloadPalette();
+            SceneView.duringSceneGui += DuringSceneView;
+
+            DestroyPreviousBrushes();
+            CreateActiveBrush();
+        }
+
+        private void CreateActiveBrush()
+        {
+            var brushObject = new GameObject("~BrushObject")
+            {
+                hideFlags = HideFlags.DontSave
+            };
+            currentBrush = brushObject.AddComponent<GameObjectBrush>();
+        }
+
+        private void DestroyPreviousBrushes()
+        {
+            var previousBrushes = FindObjectsOfType<GameObjectBrush>();
+            foreach (var previousBrush in previousBrushes)
+            {
+                Destroy(previousBrush.gameObject);
+            }
+            currentBrush = null;
+        }
+
+        private void OnDisable()
+        {
+            SceneView.duringSceneGui -= DuringSceneView;
+        }
+
+        private void DuringSceneView(SceneView sceneView)
+        {
+            if (currentBrush == null || currentBrush.prefab == null)
+                return;
+            Debug.Log("During Scene View");
         }
 
         private void OnFocus()
         {
             ReloadPalette();
+        }
+
+        private void OnLostFocus()
+        {
+            // Unselect brush tool
         }
 
         private void ReloadPalette()
@@ -87,17 +129,26 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     fixedHeight = previewSize.y
                 };
 
+                var isSelected = currentBrush.prefab == entry.prefab;
+
                 if (GUILayout.Button(previewContent, guiStyle))
                 {
-                    
+                    if (isSelected)
+                        DeselectBrushObject();
+                    else 
+                        SelectBrushObject(entry.prefab);
                 }
                 
                 var r = GUILayoutUtility.GetLastRect();
 
                 GUI.DrawTexture(r, entry.preview, ScaleMode.StretchToFill);
-
                 EditorGUI.DropShadowLabel(new Rect(r.x, r.y, r.width, r.height - 0.0f), entry.name, 
                     fontStyle);
+
+                if (isSelected)
+                {
+                    EditorGUI.DrawRect(r, new Color(0, 0, 0.5f, 0.15f));
+                }
                 
                 current += buttonSize.x;
 
@@ -114,6 +165,18 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             
             GUILayout.EndScrollView();
             GUILayout.EndVertical();
+        }
+
+        private void DeselectBrushObject()
+        {
+            currentBrush.prefab = null;
+            // TODO: destroy preview object?
+        }
+
+        private void SelectBrushObject(GameObject prefab)
+        {
+            currentBrush.prefab = prefab;
+            // TODO: create brush object...
         }
     }
 }
