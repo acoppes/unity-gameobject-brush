@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Gemserk.Tools.ObjectPalette.Editor
 {
@@ -13,6 +14,13 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         {
             None = 0,
             ConsiderChildren = 1
+        }
+
+        public static List<T> FindAssets<T>(string[] folders = null) where T : Object
+        {
+            var guids = AssetDatabase.FindAssets($"t:{typeof(T)}", folders);
+            return guids.Select(g => AssetDatabase.LoadAssetAtPath<T>(
+                AssetDatabase.GUIDToAssetPath(g))).ToList();
         }
 
         public static List<GameObject> FindPrefabs<T>(FindOptions options = 0, string[] folders = null)

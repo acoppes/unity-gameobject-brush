@@ -6,5 +6,11 @@ namespace Gemserk.Tools.ObjectPalette
     public class PixelPerfectBrushAsset : ScriptableBrushBaseAsset
     {
         public int dpi;
+
+        public override void UpdatePosition(Vector2 p)
+        {
+            base.UpdatePosition(p);
+            // now fix to pixel perfect positions
+        }
     }
 }
