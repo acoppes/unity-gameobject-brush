@@ -33,6 +33,7 @@ namespace Gemserk.Tools.ObjectPalette
                 preview.transform.localPosition = position;
                 preview.hideFlags = HideFlags.NotEditable;
                 preview.tag = "EditorOnly";
+                preview.AddComponent<BrushPreview>();
                 previewInstances.Add(preview);
                 #endif
             }
@@ -54,6 +55,7 @@ namespace Gemserk.Tools.ObjectPalette
                 previewInstance.transform.localPosition = position;
                 previewInstance.hideFlags = HideFlags.None;
                 previewInstance.tag = "Untagged";
+                DestroyImmediate(previewInstance.GetComponent<BrushPreview>());
                 #if UNITY_EDITOR
                 UnityEditor.Undo.RegisterCreatedObjectUndo (previewInstance, "Painted");
                 #endif

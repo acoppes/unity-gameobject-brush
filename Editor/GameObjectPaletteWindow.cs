@@ -47,8 +47,28 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             SceneView.duringSceneGui += DuringSceneView;
             EditorSceneManager.sceneOpened += OnSceneOpened;
             
+            DestroyHangingPreview();
+            
             if (brush == null)
                 CreateActiveBrush();
+        }
+
+        private void DestroyHangingPreview()
+        {
+            var scenes = EditorSceneManager.sceneCount;
+            for (var i = 0; i < scenes; i++)
+            {
+                var scene = EditorSceneManager.GetSceneAt(i);
+                var rootObjects = scene.GetRootGameObjects();
+                foreach (var rootObject in rootObjects)
+                {
+                    var hangingPreview = rootObject.GetComponentsInChildren<BrushPreview>();
+                    foreach (var hangingBrush in hangingPreview)
+                    {
+                        DestroyImmediate(hangingBrush.gameObject);
+                    }
+                }
+            }
         }
 
         private void OnDisable()
