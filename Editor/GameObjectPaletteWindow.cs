@@ -40,16 +40,11 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private int selectedBrushIndex;
         private PaletteEntry selectedEntry;
 
-        private static readonly Vector2[] buttonSizes = 
-        {
-            new Vector2(50, 50),
-            new Vector2(70, 70),
-            new Vector2(90, 90),
-            new Vector2(110, 110),
-            new Vector2(130, 130)
-        };
+        // TODO: configurable through scriptable object...
+        private static readonly float buttonPreviewMinSize = 50;
+        private static readonly float buttonPreviewMaxSize = 150;
 
-        private int currentButtonSize = 0;
+        private float currentButtonSize;
 
         private void OnEnable()
         {
@@ -224,7 +219,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 
             }
             
-            var buttonSize = buttonSizes[currentButtonSize];
+            var buttonSize = new Vector2(currentButtonSize, currentButtonSize);
             
             GUILayout.EndVertical();
             
@@ -305,7 +300,8 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             
             GUILayout.EndScrollView();
             
-            currentButtonSize = EditorGUILayout.IntSlider("Preview Size", currentButtonSize, 0, buttonSizes.Length - 1);
+            currentButtonSize = EditorGUILayout.Slider("Preview Size", currentButtonSize, 
+                buttonPreviewMinSize, buttonPreviewMaxSize);
             
             GUILayout.EndVertical();
         }
