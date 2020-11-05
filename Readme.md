@@ -6,6 +6,10 @@ This tool provides both a GameObject Palette Window and customizable Brushes in 
 
 We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now is free but you can pay what you want on download, it is not the idea to distribute it from outside itchio with this tool but it is great to show a good example of how the tool works.
 
+## Example 
+
+![Alt text](Images/palette_example.gif?raw=true "Example")
+
 ## Roadmap
 
 * Palette size in editor.
