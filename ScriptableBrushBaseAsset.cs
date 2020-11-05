@@ -13,7 +13,7 @@ namespace Gemserk.Tools.ObjectPalette
         [NonSerialized]
         protected readonly List<GameObject> previewInstances = new List<GameObject>();
 
-        public void UpdatePosition(Vector2 p)
+        public virtual void UpdatePosition(Vector2 p)
         {
             position = p;
 
@@ -54,6 +54,9 @@ namespace Gemserk.Tools.ObjectPalette
                 previewInstance.transform.localPosition = position;
                 previewInstance.hideFlags = HideFlags.None;
                 previewInstance.tag = "Untagged";
+                #if UNITY_EDITOR
+                UnityEditor.Undo.RegisterCreatedObjectUndo (previewInstance, "Painted");
+                #endif
             }
             previewInstances.Clear();
             
