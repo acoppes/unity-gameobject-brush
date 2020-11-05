@@ -4,10 +4,9 @@ For the sake of having a good example, we are using the free asset pack provided
 
 TODO:
 
+* Select brush in editor.
 * Brush logic for painting
-  - API, support for multiple brushes
   - Mouse drag + repeat, etc.
-  - Precreate preview using custom logic
 * Erase tool (for now with key).
 * Undo.
 * Settings (asset) to configure prefab folders.
@@ -17,3 +16,9 @@ TODO:
 * Custom brush logic (scriptable object).
   - brush pixel perfect
 * Select more than one prefab at the same time.
+
+## Brushes 
+
+* Random Flip
+* Random Size
+* Paint multiple instances, random, distribute in area.
