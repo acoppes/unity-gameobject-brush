@@ -12,25 +12,21 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
 
 ## Roadmap
 
-* Palette size in editor.
-* Brush logic for painting
-  - Mouse drag + repeat, etc.
 * Settings (asset) to configure prefab folders.
-* Custom palette filters (assets).
+  - Customizable in asset
+  - Filters to use
+  - Default prefabs folder
+* Filters for game objects (decide which objects to show in palette)
+  - Customizable (logic)
 * Cleanup stuff on scene save, load, etc.
-* Select more than one prefab at the same time.
-
-## Erase
-
-* For now with key, if clicked while holding alt, then delete nearest object.
-* While holding key or while erase selected, highlight the object that is going to be deleted?
-
-## Undo
-
-* After erase painted object.
-
-## Brushes 
-
-* Random Flip
-* Random Size
-* Paint multiple instances, random, distribute in area.
+* Erase
+  - For now with key, if clicked while holding alt, then delete nearest object.
+  - While holding key or while erase selected, highlight the object that is going to be deleted?
+* Undo
+  - After erase painted object.
+* Brushes and paint logic
+  - Paint while mouse drag (delay, distance, etc)
+  - Random Flip
+  - Random Size
+  - Paint multiple instances, random, distribute in area.
+  - Select more than one prefab at the same time
