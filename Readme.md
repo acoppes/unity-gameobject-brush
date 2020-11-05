@@ -16,3 +16,4 @@ TODO:
 * Create/Destroy brush object on palette selected, or at least for preview object.
 * Custom brush logic (scriptable object).
   - brush pixel perfect
+* Select more than one prefab at the same time.

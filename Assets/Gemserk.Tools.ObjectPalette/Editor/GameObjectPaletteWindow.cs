@@ -34,32 +34,26 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private Vector2 verticalScroll;
         private Tool previousTool;
 
-        private GameObjectBrush currentBrush;
+        private IBrush brush;
         private PaletteEntry selectedEntry;
 
         private void OnEnable()
         {
             ReloadPalette();
+            
             SceneView.duringSceneGui += DuringSceneView;
-            EditorSceneManager.sceneClosed += OnSceneClosed;
             EditorSceneManager.sceneOpened += OnSceneOpened;
-
-            DestroyPreviousBrushes();
-            // CreateActiveBrush();
+            
+            if (brush == null)
+                CreateActiveBrush();
         }
 
         private void OnDisable()
         {
             SceneView.duringSceneGui -= DuringSceneView;
-            EditorSceneManager.sceneClosed -= OnSceneClosed;
             EditorSceneManager.sceneOpened -= OnSceneOpened;
 
-            DestroyPreviousBrushes();
-        }
-        
-        private void OnSceneClosed(Scene scene)
-        {
-            
+            brush?.DestroyPreview();
         }
 
         private void OnSceneOpened(Scene scene, OpenSceneMode mode)
@@ -67,57 +61,17 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             if (mode == OpenSceneMode.Single)
             {
                 DeselectPaletteEntry();
-                DestroyPreviousBrushes();
-                // CreateActiveBrush();
             }
         }
 
         private void CreateActiveBrush()
         {
-            var brushObject = new GameObject("~BrushObject")
-            {
-                hideFlags = HideFlags.NotEditable, tag = "EditorOnly"
-            };
-            currentBrush = brushObject.AddComponent<GameObjectBrush>();
-
-            var root = FindObjectOfType<BrushRoot>();
-            if (root != null)
-            {
-                currentBrush.parent = root.transform;
-            }
-        }
-
-        private void DestroyActiveBrush()
-        {
-            if (currentBrush != null)
-            {
-                DestroyImmediate(currentBrush.gameObject);
-                currentBrush = null;
-            }
-        }
-
-        private void DestroyPreviousBrushes()
-        {
-            var scenes = EditorSceneManager.sceneCount;
-            for (int i = 0; i < scenes; i++)
-            {
-                var scene = EditorSceneManager.GetSceneAt(i);
-                var rootObjects = scene.GetRootGameObjects();
-                foreach (var rootObject in rootObjects)
-                {
-                    var hangingBrushes = rootObject.GetComponentsInChildren<GameObjectBrush>();
-                    foreach (var hangingBrush in hangingBrushes)
-                    {
-                        DestroyImmediate(hangingBrush.gameObject);
-                    }
-                }
-            }
-            currentBrush = null;
+            brush = CreateInstance<ScriptableBrushBaseAsset>();
         }
 
         private void DuringSceneView(SceneView sceneView)
         {
-            if (selectedEntry == null || currentBrush == null)
+            if (selectedEntry == null || brush == null)
                 return;
             
             var p = Event.current.mousePosition;
@@ -126,16 +80,25 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             var ray = HandleUtility.GUIPointToWorldRay(p);
             var position = ray.origin;
             position.z = 0;
-            currentBrush.transform.position = position;
+            brush.UpdatePosition(position);
+            
+            // currentBrush.transform.position = position;
             // Handles.DrawLine(btn.transform.position + Vector3.up, mousePosition);
 
             if (Event.current.rawType == EventType.MouseDown && Event.current.button == 0)
             {
                 // TODO: this is brush logic...
-                var instance = PrefabUtility.InstantiatePrefab(selectedEntry.prefab) as GameObject;
-                if (currentBrush.parent != null)
-                    instance.transform.parent = currentBrush.parent;
-                instance.transform.position = currentBrush.transform.position;
+                // var instance = PrefabUtility.InstantiatePrefab(selectedEntry.prefab) as GameObject;
+                
+                brush.Paint();
+                brush.CreatePreview(new List<GameObject>
+                {
+                    selectedEntry.prefab
+                });
+                
+                // if (currentBrush.parent != null)
+                //     instance.transform.parent = currentBrush.parent;
+                // instance.transform.position = currentBrush.transform.position;
                 Event.current.Use();
             }
             
@@ -155,15 +118,8 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private void OnFocus()
         {
             ReloadPalette();
-            // CreateActiveBrush();
         }
-
-        private void OnLostFocus()
-        {
-            // Unselect brush tool
-            // DeselectBrushObject();
-        }
-
+        
         private void ReloadPalette()
         {
             var objects = AssetDatabaseExt.FindPrefabs<Renderer>(AssetDatabaseExt.FindOptions.None, new []
@@ -268,20 +224,8 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private void DeselectPaletteEntry()
         {
-            // currentBrush.prefab = null;
-            //
-            // // var childCount = currentBrush.transform.childCount;
-            // // for (var i = 0; i < childCount; i++)
-            // // {
-            // //     var c = currentBrush.transform.GetChild(i);
-            // //     DestroyImmediate(c.gameObject);
-            // // }
-            //
-            // if (currentBrush.preview != null)
-            //     DestroyImmediate(currentBrush.preview);
-            // currentBrush.preview = null;
-
-            DestroyActiveBrush();
+            brush.DestroyPreview();
+            
             selectedEntry = null;
             UnityEditor.Tools.current = previousTool;
         }
@@ -289,13 +233,11 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private void SelectBrushObject(PaletteEntry entry)
         {
             selectedEntry = entry;
-            
-            CreateActiveBrush();
-            
-            currentBrush.preview = Instantiate(entry.prefab, currentBrush.transform);
-            currentBrush.preview.transform.localPosition= new Vector3();
-            currentBrush.preview.hideFlags = HideFlags.NotEditable;
-            currentBrush.preview.tag = "EditorOnly";
+
+            brush.CreatePreview(new List<GameObject>
+            {
+                selectedEntry.prefab
+            });
 
             previousTool = UnityEditor.Tools.current;
             UnityEditor.Tools.current = Tool.None;
