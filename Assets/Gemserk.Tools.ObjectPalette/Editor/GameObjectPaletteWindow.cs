@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -30,11 +31,13 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         
 
         private readonly List<PaletteEntry> entries = new List<PaletteEntry>();
+        private List<ScriptableBrushBaseAsset> availableBrushes = new List<ScriptableBrushBaseAsset>();
 
         private Vector2 verticalScroll;
         private Tool previousTool;
 
         private IBrush brush;
+        private int selectedBrush;
         private PaletteEntry selectedEntry;
 
         private void OnEnable()
@@ -138,11 +141,21 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     preview = AssetPreview.GetAssetPreview(obj)
                 });
             }
+
+            availableBrushes = AssetDatabaseExt.FindAssets<ScriptableBrushBaseAsset>();
         }
         
         private void OnGUI()
         {
-              var buttonSize = new Vector2(140, 140);
+            if (availableBrushes.Count > 0)
+            {
+                GUILayout.BeginVertical();
+                selectedBrush = EditorGUILayout.Popup("Brush", selectedBrush, 
+                    availableBrushes.Select(b => b.name).ToArray());
+                GUILayout.EndVertical();
+            }
+            
+            var buttonSize = new Vector2(140, 140);
             
             GUILayout.BeginVertical();
                 
