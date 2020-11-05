@@ -4,7 +4,6 @@ For the sake of having a good example, we are using the free asset pack provided
 
 TODO:
 
-* Select brush in editor.
 * Brush logic for painting
   - Mouse drag + repeat, etc.
 * Erase tool (for now with key).
