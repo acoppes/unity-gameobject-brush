@@ -6,15 +6,19 @@ TODO:
 
 * Brush logic for painting
   - Mouse drag + repeat, etc.
-* Erase tool (for now with key).
-* Undo.
 * Settings (asset) to configure prefab folders.
 * Custom palette filters (assets).
 * Cleanup stuff on scene save, load, etc.
-* Create/Destroy brush object on palette selected, or at least for preview object.
-* Custom brush logic (scriptable object).
-  - brush pixel perfect
 * Select more than one prefab at the same time.
+
+## Erase
+
+* For now with key, if clicked while holding alt, then delete nearest object.
+* While holding key or while erase selected, highlight the object that is going to be deleted?
+
+## Undo
+
+* After erase painted object.
 
 ## Brushes 
 
