@@ -4,6 +4,7 @@ For the sake of having a good example, we are using the free asset pack provided
 
 TODO:
 
+* Palette size in editor.
 * Brush logic for painting
   - Mouse drag + repeat, etc.
 * Settings (asset) to configure prefab folders.
