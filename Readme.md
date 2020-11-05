@@ -1,8 +1,12 @@
-GameObject palette + Brush for 2d Games
+# Unity's GameObject Paint Tool 
 
-For the sake of having a good example, we are using the free asset pack provided at https://bakudas.itch.io/generic-rpg-pack, there is no intention of using it without credit, so if you like it, go there and buy it.
+This tool provides both a GameObject Palette Window and customizable Brushes in order to simplify the task of decorating 2d Games scenes using GameObjects.
 
-TODO:
+## The assets pack 
+
+We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now is free but you can pay what you want on download, it is not the idea to distribute it from outside itchio with this tool but it is great to show a good example of how the tool works.
+
+## Roadmap
 
 * Palette size in editor.
 * Brush logic for painting
