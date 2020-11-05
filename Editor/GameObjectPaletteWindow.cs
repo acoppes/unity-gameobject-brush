@@ -37,7 +37,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private Tool previousTool;
 
         private IBrush brush;
-        private int selectedBrush;
+        private int selectedBrushIndex;
         private PaletteEntry selectedEntry;
 
         private void OnEnable()
@@ -150,8 +150,20 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             if (availableBrushes.Count > 0)
             {
                 GUILayout.BeginVertical();
-                selectedBrush = EditorGUILayout.Popup("Brush", selectedBrush, 
-                    availableBrushes.Select(b => b.name).ToArray());
+                var options = new List<string>() {"None"};
+                options.AddRange(availableBrushes.Select(b => b.name));
+                
+                EditorGUI.BeginChangeCheck();
+                selectedBrushIndex = EditorGUILayout.Popup("Brush", selectedBrushIndex, options.ToArray());
+                
+                if (EditorGUI.EndChangeCheck())
+                {
+                    if (selectedBrushIndex == 0)
+                        brush = CreateInstance<ScriptableBrushBaseAsset>();
+                    else
+                        brush = availableBrushes[selectedBrushIndex - 1];
+                }
+                
                 GUILayout.EndVertical();
             }
             
