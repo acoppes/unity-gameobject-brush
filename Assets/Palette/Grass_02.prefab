@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8422519325769387314}
   - component: {fileID: 8422519325769387315}
   m_Layer: 0
-  m_Name: Barrel4
+  m_Name: Grass_02
   m_TagString: EditorOnly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,4 +80,4 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1

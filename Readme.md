@@ -1,6 +1,6 @@
 GameObject palette + Brush for 2d Games
 
-For the sake of having a good example, we are using the free asset pack provided at https://bakudas.itch.io/generic-rpg-pack, there is not intention of using it without credit, so if you like it, go there and buy it.
+For the sake of having a good example, we are using the free asset pack provided at https://bakudas.itch.io/generic-rpg-pack, there is no intention of using it without credit, so if you like it, go there and buy it.
 
 TODO:
 
