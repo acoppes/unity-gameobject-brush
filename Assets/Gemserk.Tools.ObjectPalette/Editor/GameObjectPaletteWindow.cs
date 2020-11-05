@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -40,6 +39,17 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private IBrush brush;
         private int selectedBrushIndex;
         private PaletteEntry selectedEntry;
+
+        private static readonly Vector2[] buttonSizes = 
+        {
+            new Vector2(50, 50),
+            new Vector2(70, 70),
+            new Vector2(90, 90),
+            new Vector2(110, 110),
+            new Vector2(130, 130)
+        };
+
+        private int currentButtonSize = 0;
 
         private void OnEnable()
         {
@@ -96,7 +106,9 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private void OnSceneViewGui(SceneView sceneView)
         {
             // Handles.BeginGUI();
-            // if (GUI.Button(new Rect(10, 10, 100, 100),"Pipote"))
+            // // var viewSize = Handles.GetMainGameViewSize();
+            // var r = sceneView.camera.pixelRect;
+            // if (GUI.Button(new Rect(r.xMax - 100, r.yMax - 100 , 75, 75),"Pipote"))
             // {
             //     sceneView.ShowNotification(new GUIContent("HOLA"), 2);
             // }
@@ -192,9 +204,10 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private void OnGUI()
         {
+            GUILayout.BeginVertical();
+
             if (availableBrushes.Count > 0)
             {
-                GUILayout.BeginVertical();
                 var options = new List<string>() {"None"};
                 options.AddRange(availableBrushes.Select(b => b.name));
                 
@@ -209,10 +222,11 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                         brush = availableBrushes[selectedBrushIndex - 1];
                 }
                 
-                GUILayout.EndVertical();
             }
             
-            var buttonSize = new Vector2(140, 140);
+            var buttonSize = buttonSizes[currentButtonSize];
+            
+            GUILayout.EndVertical();
             
             GUILayout.BeginVertical();
                 
@@ -266,6 +280,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     entry.preview = AssetPreview.GetAssetPreview(entry.prefab);
                 }
 
+                // var smallerRect = new Rect(r.x, r.y, r.width * 0.5f, r.height * 0.5f);
                 GUI.DrawTexture(r, entry.preview, ScaleMode.StretchToFill);
                 EditorGUI.DropShadowLabel(new Rect(r.x, r.y, r.width, r.height - 0.0f), entry.name, 
                     fontStyle);
@@ -289,6 +304,9 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             GUILayout.EndHorizontal();
             
             GUILayout.EndScrollView();
+            
+            currentButtonSize = EditorGUILayout.IntSlider("Preview Size", currentButtonSize, 0, buttonSizes.Length - 1);
+            
             GUILayout.EndVertical();
         }
 
