@@ -5,6 +5,7 @@ For the sake of having a good example, we are using the free asset pack provided
 TODO:
 
 * Brush logic for painting
+  - API, support for multiple brushes
   - Mouse drag + repeat, etc.
   - Precreate preview using custom logic
 * Erase tool (for now with key).
