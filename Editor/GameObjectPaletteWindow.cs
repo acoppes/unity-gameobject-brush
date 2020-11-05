@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -44,7 +45,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         {
             ReloadPalette();
             
-            SceneView.duringSceneGui += DuringSceneView;
+            // SceneView.duringSceneGui += DuringSceneView;
             EditorSceneManager.sceneOpened += OnSceneOpened;
             
             DestroyHangingPreview();
@@ -73,7 +74,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private void OnDisable()
         {
-            SceneView.duringSceneGui -= DuringSceneView;
+            // SceneView.duringSceneGui -= DuringSceneView;
             EditorSceneManager.sceneOpened -= OnSceneOpened;
 
             brush?.DestroyPreview();
@@ -92,8 +93,15 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             brush = CreateInstance<ScriptableBrushBaseAsset>();
         }
 
-        private void DuringSceneView(SceneView sceneView)
+        private void OnSceneViewGui(SceneView sceneView)
         {
+            // Handles.BeginGUI();
+            // if (GUI.Button(new Rect(10, 10, 100, 100),"Pipote"))
+            // {
+            //     sceneView.ShowNotification(new GUIContent("HOLA"), 2);
+            // }
+            // Handles.EndGUI();
+            
             if (selectedEntry == null || brush == null)
                 return;
             
@@ -136,13 +144,30 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             // {
             //     Event.current.Use();
             // }
+
+
+        }
+        
+        private void OnBecameVisible()
+        {
+            SceneView.duringSceneGui += OnSceneViewGui;
+            brush?.CreatePreview(new List<GameObject>
+            {
+                selectedEntry.prefab
+            });
+        }
+
+        private void OnBecameInvisible()
+        {
+            SceneView.duringSceneGui -= OnSceneViewGui;
+            brush?.DestroyPreview();
         }
 
         private void OnFocus()
         {
             ReloadPalette();
         }
-        
+
         private void ReloadPalette()
         {
             var objects = AssetDatabaseExt.FindPrefabs<Renderer>(AssetDatabaseExt.FindOptions.None, new []
@@ -164,7 +189,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
             availableBrushes = AssetDatabaseExt.FindAssets<ScriptableBrushBaseAsset>();
         }
-        
+
         private void OnGUI()
         {
             if (availableBrushes.Count > 0)
