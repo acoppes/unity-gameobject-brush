@@ -17,6 +17,7 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
   - Customizable in asset
   - Filters to use
   - Default prefabs folder
+  - Search for children or not when generating palette.
 * Filters for game objects (decide which objects to show in palette)
   - Customizable (logic)
 * Cleanup stuff on scene save, load, etc.

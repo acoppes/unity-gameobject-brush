@@ -181,7 +181,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private void ReloadPalette()
         {
-            var objects = AssetDatabaseExt.FindPrefabs<Renderer>(AssetDatabaseExt.FindOptions.None, new []
+            var objects = AssetDatabaseExt.FindPrefabs<Renderer>(AssetDatabaseExt.FindOptions.ConsiderChildren, new []
             {
                 "Assets/Palette"
             });
