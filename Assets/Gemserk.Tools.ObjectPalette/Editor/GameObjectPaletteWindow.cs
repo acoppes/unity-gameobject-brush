@@ -12,7 +12,8 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         [MenuItem("Window/Object Palette/Palette Window")]
         public static void OpenWindow()
         {
-            GetWindow(typeof(GameObjectPaletteWindow), false, "Object Palette");
+            var window = GetWindow(typeof(GameObjectPaletteWindow), false, "Object Palette");
+            window.minSize = new Vector2(300, 300);
         }
 
         private class PaletteEntry
