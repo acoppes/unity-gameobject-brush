@@ -1,5 +1,5 @@
 {
-  "name": "com.gemserk.gameobjectbrush",
+  "name": "com.gemserk.tools.gameobjectbrush",
   "version": "0.0.1-preview",
   "displayName": "GameObject Paint Tool",
   "description": "GameObject Paint Tool https://github.com/acoppes/unity-gameobject-brush",
