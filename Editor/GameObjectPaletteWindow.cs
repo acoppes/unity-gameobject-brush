@@ -158,10 +158,13 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private void OnBecameVisible()
         {
             SceneView.duringSceneGui += OnSceneViewGui;
-            brush?.CreatePreview(new List<GameObject>
+            if (selectedEntry != null)
             {
-                selectedEntry.prefab
-            });
+                brush?.CreatePreview(new List<GameObject>
+                {
+                    selectedEntry.prefab
+                });
+            }
         }
 
         private void OnBecameInvisible()
