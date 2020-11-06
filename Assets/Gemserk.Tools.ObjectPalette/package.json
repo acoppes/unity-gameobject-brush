@@ -1,0 +1,19 @@
+{
+  "name": "com.gemserk.gameobjectbrush",
+  "version": "0.0.1-preview",
+  "displayName": "GameObject Paint Tool",
+  "description": "GameObject Paint Tool https://github.com/acoppes/unity-gameobject-brush",
+  "unity": "2019.4",
+  "unityRelease": "13f1",
+  "dependencies": { },
+  "keywords": [
+    "tools",
+    "paint",
+    "brush"
+  ],
+  "author": {
+    "name": "Ariel Coppes",
+    "email": "ariel.coppes@gmail.com",
+    "url": "https://blog.gemserk.com"
+  }
+}
