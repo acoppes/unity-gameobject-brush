@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.gemserk.upmgitpusher": "https://github.com/acoppes/upmgitpusher.git#com.gemserk.upmgitpusher",
     "com.unity.2d.animation": "3.2.5",
     "com.unity.2d.pixel-perfect": "2.0.4",
     "com.unity.2d.sprite": "1.0.0",

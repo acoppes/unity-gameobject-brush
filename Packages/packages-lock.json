@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.gemserk.upmgitpusher": {
+      "version": "https://github.com/acoppes/upmgitpusher.git#com.gemserk.upmgitpusher",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "ed3d03221402cdf0feb2deb8eb925546b33213d4"
+    },
     "com.unity.2d.animation": {
       "version": "3.2.5",
       "depth": 0,
