@@ -183,7 +183,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         {
             var objects = AssetDatabaseExt.FindPrefabs<Renderer>(AssetDatabaseExt.FindOptions.ConsiderChildren, new []
             {
-                "Assets/Palette"
+                "Assets"
             });
 
             entries.Clear();
