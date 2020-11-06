@@ -14,7 +14,7 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
 
 * Release as package.
 * Settings (asset) to configure prefab folders.
-  - Customizable in asset
+  - Customizable in asset or preferences
   - Filters to use
   - Default prefabs folder
   - Search for children or not when generating palette.

@@ -1,9 +1,19 @@
+# 0.0.3 
+
+## Changed
+
+  * Search in Assets folder by default (not Assets/Palette)
+
 # 0.0.2
 
 ## Fixed
 
   * Bug when become visible was called and no selected entry was selected.
   * Default window size when first time open.
+
+## Changed
+
+  * Now prefabs with renderer in children objects are considered too when generating the palette.
 
 # 0.0.1
 
