@@ -4,9 +4,9 @@ This tool provides both a GameObject Palette Window and customizable Brushes in 
 
 ## Features
 
-### Preview what you paint, in the layer you paint it.
-### Customizable brushes.
-### Customizable palette window.
+ * Preview what you paint, in the layer you paint it.
+ * Customizable brushes.
+ * Customizable palette window.
 
 ## Example 
 
@@ -38,3 +38,7 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
   - Paint multiple instances, random, distribute in area.
   - Select more than one prefab at the same time
   - Paint with prefab instance or unpack prefab.
+
+## Licence 
+
+This repository is [MIT](./LICENSE.md) licensed.
