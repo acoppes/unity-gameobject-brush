@@ -1,5 +1,10 @@
 # 0.0.3 
 
+## Added
+
+  * Erase tool, for now by clicking while left alt key is pressed
+  * Undo for erasing objects.
+
 ## Fixed
 
   * Previously selected unity tool restored on unselect palette.

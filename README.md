@@ -27,7 +27,7 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
   - Search for children or not when generating palette.
 * Cleanup stuff on scene save, load, etc.
 * Erase
-  - For now with key, if clicked while holding alt, then delete nearest object.
+  - Filter which objects not to delete (check objects inside root, avoid root, camera, etc)
   - While holding key or while erase selected, highlight the object that is going to be deleted?
 * Undo
   - After erase painted object.
@@ -42,6 +42,7 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
   - Selected entries should be a list (or a concept Selection).
   - ESC key to unselect
   - Visible tools for paint and erase (with icons), with togglable buttons.
+  - Configurable modifier key to toggle erase
 
 ## Licence 
 
