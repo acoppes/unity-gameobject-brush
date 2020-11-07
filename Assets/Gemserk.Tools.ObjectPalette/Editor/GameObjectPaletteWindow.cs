@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -281,6 +281,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
                 // var smallerRect = new Rect(r.x, r.y, r.width * 0.5f, r.height * 0.5f);
                 GUI.DrawTexture(r, entry.preview, ScaleMode.StretchToFill);
+                
                 EditorGUI.DropShadowLabel(new Rect(r.x, r.y, r.width, r.height - 0.0f), entry.name, 
                     fontStyle);
 
