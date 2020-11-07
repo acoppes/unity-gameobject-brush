@@ -191,7 +191,8 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     // TODO: ignore camera, etc...
                     if (go != null)
                     {
-                        DestroyImmediate(go);
+                        Undo.DestroyObjectImmediate(go);
+                        // DestroyImmediate(go);
                         Event.current.Use();
                     }
                     // raycast select object in scene?
