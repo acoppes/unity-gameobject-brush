@@ -280,7 +280,8 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 }
 
                 // var smallerRect = new Rect(r.x, r.y, r.width * 0.5f, r.height * 0.5f);
-                GUI.DrawTexture(r, entry.preview, ScaleMode.StretchToFill);
+                if (entry.preview != null)
+                    GUI.DrawTexture(r, entry.preview, ScaleMode.StretchToFill);
                 
                 EditorGUI.DropShadowLabel(new Rect(r.x, r.y, r.width, r.height - 0.0f), entry.name, 
                     fontStyle);
@@ -316,7 +317,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             brush.DestroyPreview();
             
             selectedEntry = null;
-            UnityEditor.Tools.current = previousTool;
+            RestoreUnityTool();
         }
 
         private void SelectBrushObject(PaletteEntry entry)
@@ -328,8 +329,27 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 selectedEntry.prefab
             });
 
-            previousTool = UnityEditor.Tools.current;
+            UnselectUnityTool();
+        }
+
+        private void UnselectUnityTool()
+        {
+            if (UnityEditor.Tools.current != Tool.None)
+            {
+                previousTool = UnityEditor.Tools.current;
+                Debug.Log($"Storing selected tool: {previousTool}");
+            }
             UnityEditor.Tools.current = Tool.None;
+        }
+
+        public void RestoreUnityTool()
+        {
+            if (previousTool != Tool.None)
+            {
+                UnityEditor.Tools.current = previousTool;
+                Debug.Log($"Restoring selected tool: {previousTool}");
+            }
+            previousTool = Tool.None;
         }
     }
 }
