@@ -1,5 +1,9 @@
 # 0.0.3 
 
+## Fixed
+
+  * Previously selected unity tool restored on unselect palette.
+
 ## Changed
 
   * Search in Assets folder by default (not Assets/Palette)

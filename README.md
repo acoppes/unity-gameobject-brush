@@ -38,6 +38,10 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
   - Paint multiple instances, random, distribute in area.
   - Select more than one prefab at the same time
   - Paint with prefab instance or unpack prefab.
+* Misc
+  - Selected entries should be a list (or a concept Selection).
+  - ESC key to unselect
+  - Visible tools for paint and erase (with icons), with togglable buttons.
 
 ## Licence 
 
