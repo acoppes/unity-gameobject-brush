@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -17,77 +16,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             window.minSize = new Vector2(300, 300);
         }
 
-        private class PaletteEntry : IEquatable<PaletteEntry>
-        {
-            public string name;
-            public GameObject prefab;
-            public Texture preview;
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(null, obj)) return false;
-                if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != this.GetType()) return false;
-                return Equals((PaletteEntry) obj);
-            }
-
-            public bool Equals(PaletteEntry other)
-            {
-                if (ReferenceEquals(null, other)) return false;
-                if (ReferenceEquals(this, other)) return true;
-                return name == other.name && Equals(prefab, other.prefab) && Equals(preview, other.preview);
-            }
-
-            public override int GetHashCode()
-            {
-                unchecked
-                {
-                    var hashCode = (name != null ? name.GetHashCode() : 0);
-                    hashCode = (hashCode * 397) ^ (prefab != null ? prefab.GetHashCode() : 0);
-                    hashCode = (hashCode * 397) ^ (preview != null ? preview.GetHashCode() : 0);
-                    return hashCode;
-                }
-            }
-        }
-
-        private class PaletteSelection
-        {
-            public List<PaletteEntry> selection = new List<PaletteEntry>();
-
-            public bool IsEmpty => selection.Count == 0;
-
-            public List<GameObject> SelectedPrefabs
-            {
-                get
-                {
-                    return selection.Select(s => s.prefab).ToList();
-                }
-            }
-
-            public void Clear()
-            {
-                selection.Clear();
-            }
-
-            public bool Contains(PaletteEntry p)
-            {
-                return selection.Contains(p);
-            }
-
-            public void Add(PaletteEntry p)
-            {
-                selection.Add(p);
-            }
-        }
-
-        private enum PaletteTool
-        {
-            Paint,
-            Erase
-        }
-        
-
-        private readonly List<PaletteEntry> entries = new List<PaletteEntry>();
+        private readonly List<PaletteObject> entries = new List<PaletteObject>();
         private List<ScriptableBrushBaseAsset> availableBrushes = new List<ScriptableBrushBaseAsset>();
 
         private Vector2 verticalScroll;
@@ -96,15 +25,13 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private IBrush brush;
         private int selectedBrushIndex;
         
-        private PaletteSelection selection = new PaletteSelection();
+        public static bool windowVisible = false;
 
         // TODO: configurable through scriptable object...
         private static readonly float buttonPreviewMinSize = 50;
         private static readonly float buttonPreviewMaxSize = 150;
 
         private float currentButtonSize;
-
-        private PaletteTool currentTool = PaletteTool.Paint;
 
         private void OnEnable()
         {
@@ -168,21 +95,21 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             GUILayout.BeginHorizontal();
             
             EditorGUI.BeginChangeCheck();
-            var eraseToggle = GUILayout.Toggle(currentTool == PaletteTool.Erase, "Erase", "Button");
+            var eraseToggle = GUILayout.Toggle(PaletteCommon.mode == PaletteToolMode.Erase, "Erase", "Button");
             if (EditorGUI.EndChangeCheck())
             {
                 if (eraseToggle)
                 {
-                    currentTool = PaletteTool.Erase;
+                    PaletteCommon.mode = PaletteToolMode.Erase;
                     UnselectUnityTool();
                     brush?.DestroyPreview();
                 }
                 else
                 {
-                    currentTool = PaletteTool.Paint;
+                    PaletteCommon.mode = PaletteToolMode.Paint;
                     RestoreUnityTool();
-                    if (brush != null && !selection.IsEmpty)
-                        brush.CreatePreview(selection.SelectedPrefabs);  
+                    if (brush != null && !PaletteCommon.selection.IsEmpty)
+                        brush.CreatePreview(PaletteCommon.selection.SelectedPrefabs);  
                 }
             }
             
@@ -192,7 +119,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             
             if (Event.current.rawType == EventType.KeyDown && Event.current.keyCode == KeyCode.LeftAlt)
             {
-                currentTool = PaletteTool.Erase;
+                PaletteCommon.mode = PaletteToolMode.Erase;
                 UnselectUnityTool();
             
                 brush?.DestroyPreview();
@@ -200,12 +127,12 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             
             if (Event.current.rawType == EventType.KeyUp && Event.current.keyCode == KeyCode.LeftAlt)
             {
-                currentTool = PaletteTool.Paint;
+                PaletteCommon.mode = PaletteToolMode.Paint;
                 RestoreUnityTool();
             
-                if (brush != null && !selection.IsEmpty)
+                if (brush != null && !PaletteCommon.selection.IsEmpty)
                 {
-                    brush.CreatePreview(selection.SelectedPrefabs);
+                    brush.CreatePreview(PaletteCommon.selection.SelectedPrefabs);
                 }
             }
             
@@ -235,18 +162,23 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             // currentBrush.transform.position = position;
             // Handles.DrawLine(btn.transform.position + Vector3.up, mousePosition);
 
-            if (Event.current.rawType == EventType.MouseDown && Event.current.button == 0)
+            var rawEvent = Event.current.rawType;
+            // var isPaintEvent = rawEvent == EventType.MouseDown || rawEvent == EventType.MouseDrag || rawEvent == EventType.MouseMove;
+            
+            // TODO: repeat delay/distance.
+
+            if (rawEvent == EventType.MouseDown && Event.current.button == 0)
             {
-                if (currentTool == PaletteTool.Paint)
+                if (PaletteCommon.mode == PaletteToolMode.Paint)
                 {
-                    if (brush != null && !selection.IsEmpty)
+                    if (brush != null && !PaletteCommon.selection.IsEmpty)
                     {
                         brush.Paint();
-                        brush.CreatePreview(selection.SelectedPrefabs);
-                        Event.current.Use();
+                        brush.CreatePreview(PaletteCommon.selection.SelectedPrefabs);
+                        // Event.current.Use();
                     }
                 }
-                else if (currentTool == PaletteTool.Erase)
+                else if (PaletteCommon.mode == PaletteToolMode.Erase)
                 {
                     var go = HandleUtility.PickGameObject(p, true);
                     
@@ -254,7 +186,6 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     {
                         Debug.Log($"Erase: {go.name}");
                     }
-                    
                     
                     // Custom
                     // d_color_picker
@@ -264,7 +195,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     if (go != null && PrefabUtility.GetPrefabInstanceStatus(go) != PrefabInstanceStatus.NotAPrefab)
                     {
                         Undo.DestroyObjectImmediate(go);
-                        Event.current.Use();
+                        // Event.current.Use();
                     }
                 }
             }
@@ -273,16 +204,20 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         
         private void OnBecameVisible()
         {
+            windowVisible = true;
+
             SceneView.duringSceneGui += OnSceneViewGui;
             // Regenerate brush preview if window became visible, if some selection was active
-            if (!selection.IsEmpty)
+            if (!PaletteCommon.selection.IsEmpty)
             {
-                brush?.CreatePreview(selection.SelectedPrefabs);
+                brush?.CreatePreview(PaletteCommon.selection.SelectedPrefabs);
             }
         }
 
         private void OnBecameInvisible()
         {
+            windowVisible = false;
+            
             SceneView.duringSceneGui -= OnSceneViewGui;
             brush?.DestroyPreview();
         }
@@ -303,7 +238,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             
             foreach (var obj in objects)
             {
-                entries.Add(new PaletteEntry
+                entries.Add(new PaletteObject
                 {
                     name = obj.name,
                     prefab = obj,
@@ -378,7 +313,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     fixedHeight = previewSize.y
                 };
 
-                var isSelected = selection.Contains(entry);
+                var isSelected = PaletteCommon.selection.Contains(entry);
 
                 if (GUILayout.Button(previewContent, guiStyle))
                 {
@@ -443,35 +378,29 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private void UnselectPalette()
         {
             brush.DestroyPreview();
-            selection.Clear();
+            PaletteCommon.selection.Clear();
             RestoreUnityTool();
         }
 
-        private void SelectBrushObject(PaletteEntry entry)
+        private void SelectBrushObject(PaletteObject o)
         {
-            selection.Add(entry);
-            brush.CreatePreview(selection.SelectedPrefabs);
+            PaletteCommon.selection.Add(o);
+            brush.CreatePreview(PaletteCommon.selection.SelectedPrefabs);
             UnselectUnityTool();
         }
 
         private void UnselectUnityTool()
         {
-            if (UnityEditor.Tools.current != Tool.None)
-            {
-                previousTool = UnityEditor.Tools.current;
-                Debug.Log($"Storing selected tool: {previousTool}");
-            }
-            UnityEditor.Tools.current = Tool.None;
+            var type = UnityEditor.EditorTools.EditorTools.activeToolType;
+            if (type != typeof(PalettePaintTool))
+                UnityEditor.EditorTools.EditorTools.SetActiveTool<PalettePaintTool>();
         }
 
         public void RestoreUnityTool()
         {
-            if (previousTool != Tool.None)
-            {
-                UnityEditor.Tools.current = previousTool;
-                Debug.Log($"Restoring selected tool: {previousTool}");
-            }
-            previousTool = Tool.None;
+            var type = UnityEditor.EditorTools.EditorTools.activeToolType;
+            if (type == typeof(PalettePaintTool))
+                UnityEditor.EditorTools.EditorTools.RestorePreviousTool();
         }
     }
 }

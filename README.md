@@ -18,6 +18,13 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
 
 ## Roadmap
 
+### Next
+
+  * Use Unity EditorTool so we can use events in our way.
+    - Can we select our custom tool from our editor window when a palette object is selected?
+
+### Later
+
 * Filters for game objects (decide which objects to show in palette)
   - Customizable (logic)
 * Settings (asset) to configure prefab folders.
@@ -29,6 +36,7 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
 * Erase
   - Filter which objects not to delete (check objects inside root, avoid root, camera, etc)
   - While holding key or while erase selected, highlight the object that is going to be deleted?
+  - Bigger "erase" size, now it works one by one and doesn't allow dragging.
 * Brushes and paint logic
   - Paint while mouse drag (delay, distance, etc)
   - Random Flip
@@ -46,6 +54,8 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
   - Refresh preview with mouse wheel up/down (useful if the brush has random modifiers)
   - Maybe add brush modifiers to allow overriding some logic.
     - For example, multiple instances of same prefab (for grass), or random between selected prefabs, etc.
+  - Documentation of how to use it and extend.
+  - Maybe brushes should be GameObjects to support custom modifiers as components.
 
 ## Licence 
 
