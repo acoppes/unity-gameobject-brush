@@ -17,7 +17,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         }
 
         private readonly List<PaletteObject> entries = new List<PaletteObject>();
-        private List<ScriptableBrushBaseAsset> availableBrushes = new List<ScriptableBrushBaseAsset>();
+        private List<ScriptableDefaultBrushAsset> availableBrushes = new List<ScriptableDefaultBrushAsset>();
 
         private Vector2 verticalScroll;
         private Tool previousTool;
@@ -31,6 +31,9 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private static readonly float buttonPreviewMaxSize = 150;
 
         private float currentButtonSize;
+
+        [SerializeField]
+        private ScriptableBrushBaseAsset defaultBrush;
 
         private void OnEnable()
         {
@@ -80,7 +83,14 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private void CreateActiveBrush()
         {
-            PaletteCommon.brush = CreateInstance<ScriptableBrushBaseAsset>();
+            if (defaultBrush != null)
+            {
+                PaletteCommon.brush = defaultBrush;
+            }
+            else
+            {
+                PaletteCommon.brush = CreateInstance<ScriptableDefaultBrushAsset>();    
+            }
         }
 
         private void OnSceneViewGui(SceneView sceneView)
@@ -191,7 +201,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 });
             }
 
-            availableBrushes = AssetDatabaseExt.FindAssets<ScriptableBrushBaseAsset>();
+            availableBrushes = AssetDatabaseExt.FindAssets<ScriptableDefaultBrushAsset>();
         }
 
         private void OnGUI()
@@ -214,7 +224,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 if (EditorGUI.EndChangeCheck())
                 {
                     if (selectedBrushIndex == 0)
-                        PaletteCommon.brush = CreateInstance<ScriptableBrushBaseAsset>();
+                        PaletteCommon.brush = CreateInstance<ScriptableDefaultBrushAsset>();
                     else
                         PaletteCommon.brush = availableBrushes[selectedBrushIndex - 1];
                 }
