@@ -4,10 +4,12 @@
 
   * Support for multiselection with shift key pressed.
   * Added small distribute logic to default brush.
+  * New tool in editor window with custom brush icon.
 
 ## Changed
 
   * Now preview objects has common parent.
+  * Changed to switch between paint and erase mode with E key, disabled erase while holding left alt key.
 
 # 0.0.4
 
