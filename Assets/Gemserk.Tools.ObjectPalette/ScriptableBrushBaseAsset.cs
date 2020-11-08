@@ -48,7 +48,7 @@ namespace Gemserk.Tools.ObjectPalette
             {
 #if UNITY_EDITOR
                 var offset = Vector2.zero; 
-                if (prefabs.Count > 0)
+                if (prefabs.Count > 1)
                 {
                     var len = UnityEngine.Random.Range(minDistributionOffset, maxDistributionOffset);
                     var angle = UnityEngine.Random.Range(0, 360);
