@@ -359,6 +359,8 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 fontSize = 10
             };
 
+            var multiselection = Event.current.shift;
+
             foreach (var entry in entries)
             {
                 var previewSize = buttonSize;
@@ -380,13 +382,21 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
                 if (GUILayout.Button(previewContent, guiStyle))
                 {
-                    if (isSelected)
-                        UnselectPalette();
-                    else
+                    if (multiselection)
                     {
-                        UnselectPalette();
                         SelectBrushObject(entry);
                     }
+                    else
+                    {
+                        if (isSelected)
+                            UnselectPalette();
+                        else
+                        {
+                            UnselectPalette();
+                            SelectBrushObject(entry);
+                        }    
+                    }
+                    
                 }
                 
                 var r = GUILayoutUtility.GetLastRect();

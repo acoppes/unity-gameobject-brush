@@ -1,5 +1,9 @@
 # 0.0.5
 
+## Added
+
+  * Support for multiselection with shift key pressed.
+
 # 0.0.4
 
 ## Changed
