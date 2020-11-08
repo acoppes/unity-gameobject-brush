@@ -49,6 +49,12 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 }
             }
         }
+
+        private enum PaletteTool
+        {
+            Paint,
+            Erase
+        }
         
 
         private readonly List<PaletteEntry> entries = new List<PaletteEntry>();
@@ -67,7 +73,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private float currentButtonSize;
 
-        private bool erasing = false;
+        private PaletteTool currentTool = PaletteTool.Paint;
 
         private void OnEnable()
         {
@@ -124,27 +130,48 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private void OnSceneViewGui(SceneView sceneView)
         {
             Handles.BeginGUI();
-            // var viewSize = Handles.GetMainGameViewSize();
+            
             var r = sceneView.camera.pixelRect;
-            if (GUI.Button(new Rect(r.xMax - 100, r.yMax - 100 , 75, 75),$"Erasing:\n{erasing}"))
+            var toolsRect = new Rect(r.xMax - 100, r.yMax - 50 , 75, 50);
+            GUILayout.BeginArea(toolsRect);
+            GUILayout.BeginHorizontal();
+            
+            EditorGUI.BeginChangeCheck();
+            var eraseToggle = GUILayout.Toggle(currentTool == PaletteTool.Erase, "Erase", "Button");
+            if (EditorGUI.EndChangeCheck())
             {
-                // sceneView.ShowNotification(new GUIContent("HOLA"), 2);
+                if (eraseToggle)
+                {
+                    currentTool = PaletteTool.Erase;
+                    UnselectUnityTool();
+                    brush?.DestroyPreview();
+                }
+                else
+                {
+                    currentTool = PaletteTool.Paint;
+                    RestoreUnityTool();
+                    if (brush != null && selectedEntry != null)
+                        brush.CreatePreview(new List<GameObject> {selectedEntry.prefab});  
+                }
             }
+            
+            GUILayout.EndHorizontal();
+            GUILayout.EndArea();
             Handles.EndGUI();
             
             if (Event.current.rawType == EventType.KeyDown && Event.current.keyCode == KeyCode.LeftAlt)
             {
-                erasing = true;
+                currentTool = PaletteTool.Erase;
                 UnselectUnityTool();
-
+            
                 brush?.DestroyPreview();
             }
-
+            
             if (Event.current.rawType == EventType.KeyUp && Event.current.keyCode == KeyCode.LeftAlt)
             {
-                erasing = false;
+                currentTool = PaletteTool.Paint;
                 RestoreUnityTool();
-
+            
                 if (brush != null && selectedEntry != null)
                 {
                     brush.CreatePreview(new List<GameObject>() {selectedEntry.prefab});
@@ -167,7 +194,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
             if (Event.current.rawType == EventType.MouseDown && Event.current.button == 0)
             {
-                if (!erasing)
+                if (currentTool == PaletteTool.Paint)
                 {
                     if (selectedEntry != null && brush != null)
                     {
@@ -179,39 +206,28 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                         Event.current.Use();
                     }
                 }
-                else
+                else if (currentTool == PaletteTool.Erase)
                 {
-                    // var go = HandleUtility.PickGameObject(position, false);
                     var go = HandleUtility.PickGameObject(p, true);
                     
                     if (go != null)
                     {
                         Debug.Log($"Erase: {go.name}");
                     }
-                    // TODO: ignore camera, etc...
-                    if (go != null)
+                    
+                    
+                    // Custom
+                    // d_color_picker
+                    
+                    // check if it is a prefab instance since now we instantiate prefabs (but that could change)
+                    // TODO: check if object in root, etc.
+                    if (go != null && PrefabUtility.GetPrefabInstanceStatus(go) != PrefabInstanceStatus.NotAPrefab)
                     {
                         Undo.DestroyObjectImmediate(go);
-                        // DestroyImmediate(go);
                         Event.current.Use();
                     }
-                    // raycast select object in scene?
-                    // destroy object...
                 }
             }
-            
-            // if (Event.current.rawType == EventType.MouseDrag)
-            // {
-            //     var instance = PrefabUtility.InstantiatePrefab(currentBrush.prefab) as GameObject;
-            //     instance.transform.position = currentBrush.transform.position;
-            //     Event.current.Use();
-            // }
-            
-            // if (Event.current.rawType == EventType.MouseUp)
-            // {
-            //     Event.current.Use();
-            // }
-
 
         }
         
