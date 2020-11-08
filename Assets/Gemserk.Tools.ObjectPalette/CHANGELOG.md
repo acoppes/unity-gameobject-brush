@@ -3,6 +3,11 @@
 ## Added
 
   * Support for multiselection with shift key pressed.
+  * Added small distribute logic to default brush.
+
+## Changed
+
+  * Now preview objects has common parent.
 
 # 0.0.4
 

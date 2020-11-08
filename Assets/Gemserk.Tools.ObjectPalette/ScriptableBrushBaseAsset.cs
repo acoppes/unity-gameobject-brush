@@ -7,44 +7,63 @@ namespace Gemserk.Tools.ObjectPalette
     [CreateAssetMenu(menuName = "Object Palette/Default Brush")]
     public class ScriptableBrushBaseAsset : ScriptableObject, IBrush
     {
+        public float minDistributionOffset = 0.0f;
+        public float maxDistributionOffset = 1.0f;
+        
         [NonSerialized]
         protected Vector2 position;
         
         [NonSerialized]
         protected readonly List<GameObject> previewInstances = new List<GameObject>();
 
+        [NonSerialized]
+        private Transform previewParent;
+
         public virtual void UpdatePosition(Vector2 p)
         {
             position = p;
-
-            foreach (var previewInstance in previewInstances)
-            {
-                previewInstance.transform.localPosition = p;
-            }
+            if (previewParent != null)
+                previewParent.position = p;
         }
 
         public void CreatePreview(List<GameObject> prefabs)
         {
             DestroyPreview();
+
+            if (previewParent == null)
+            {
+                var brushPreviewObject = new GameObject("~BrushPreview");
+                
+                brushPreviewObject.hideFlags = HideFlags.NotEditable;
+                brushPreviewObject.tag = "EditorOnly";
+                brushPreviewObject.AddComponent<BrushPreview>();
+                
+                previewParent = brushPreviewObject.transform;
+                previewParent.position = position;
+            }
+
             foreach (var prefab in prefabs)
             {
-                #if UNITY_EDITOR
-                var preview = UnityEditor.PrefabUtility.InstantiatePrefab(prefab) as GameObject;
-                preview.transform.localPosition = position;
-                preview.hideFlags = HideFlags.NotEditable;
-                preview.tag = "EditorOnly";
-                preview.AddComponent<BrushPreview>();
+#if UNITY_EDITOR
+                var offset = Vector2.zero; 
+                if (prefabs.Count > 0)
+                {
+                    var len = UnityEngine.Random.Range(minDistributionOffset, maxDistributionOffset);
+                    var angle = UnityEngine.Random.Range(0, 360);
+                    offset = Quaternion.Euler(0, 0, angle) * new Vector3(len, 0, 0);
+                }
+                var preview = UnityEditor.PrefabUtility.InstantiatePrefab(prefab, previewParent) as GameObject;
+                preview.transform.localPosition = offset;
                 previewInstances.Add(preview);
-                #endif
+#endif
             }
         }
 
         public void DestroyPreview()
         {
-            foreach (var previewInstance in previewInstances)
-            {
-                DestroyImmediate(previewInstance);
-            }
+            if (previewParent != null)
+                DestroyImmediate(previewParent.gameObject);
+            previewParent = null;
             previewInstances.Clear();
         }
 
@@ -52,21 +71,12 @@ namespace Gemserk.Tools.ObjectPalette
         {
             foreach (var previewInstance in previewInstances)
             {
-                previewInstance.transform.localPosition = position;
-                previewInstance.hideFlags = HideFlags.None;
-                previewInstance.tag = "Untagged";
-                DestroyImmediate(previewInstance.GetComponent<BrushPreview>());
+                previewInstance.transform.parent = previewParent.parent;
                 #if UNITY_EDITOR
                 UnityEditor.Undo.RegisterCreatedObjectUndo (previewInstance, "Painted");
                 #endif
             }
             previewInstances.Clear();
-            
-            // var instance = PrefabUtility.InstantiatePrefab(selectedEntry.prefab) as GameObject;
-            
-            // if (currentBrush.parent != null)
-            //     instance.transform.parent = currentBrush.parent;
-            // instance.transform.position = currentBrush.transform.position;
         }
     }
 }

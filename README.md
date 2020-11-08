@@ -42,6 +42,10 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
   - Configurable modifier key to toggle erase
   - Sprite assets in palette
   - Change to use UIElements.
+  - User brush override data in editor window.
+  - Refresh preview with mouse wheel up/down (useful if the brush has random modifiers)
+  - Maybe add brush modifiers to allow overriding some logic.
+    - For example, multiple instances of same prefab (for grass), or random between selected prefabs, etc.
 
 ## Licence 
 
