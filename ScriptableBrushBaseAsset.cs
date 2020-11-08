@@ -32,10 +32,12 @@ namespace Gemserk.Tools.ObjectPalette
 
             if (previewParent == null)
             {
-                var brushPreviewObject = new GameObject("~BrushPreview");
-                
-                brushPreviewObject.hideFlags = HideFlags.NotEditable;
-                brushPreviewObject.tag = "EditorOnly";
+                var brushPreviewObject = new GameObject("~BrushPreview")
+                {
+                    hideFlags = HideFlags.NotEditable, 
+                    tag = "EditorOnly"
+                };
+
                 brushPreviewObject.AddComponent<BrushPreview>();
                 
                 previewParent = brushPreviewObject.transform;
