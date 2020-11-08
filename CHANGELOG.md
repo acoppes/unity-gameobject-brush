@@ -1,5 +1,9 @@
 # 0.0.4
 
+## Changed
+ 
+  * Added changelog and license to package root folder.
+
 # 0.0.3 
 
 ## Added
