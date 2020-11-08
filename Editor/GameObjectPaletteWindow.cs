@@ -33,7 +33,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private float currentButtonSize;
 
         [SerializeField]
-        private ScriptableBrushBaseAsset defaultBrush;
+        private ScriptableBrushBaseAsset defaultBrush = null;
 
         private void OnEnable()
         {

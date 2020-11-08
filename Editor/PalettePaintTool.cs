@@ -9,7 +9,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
     {
         // Serialize this value to set a default value in the Inspector.
         [SerializeField]
-        private Texture2D m_ToolIcon;
+        private Texture2D m_ToolIcon = null;
 
         private GUIContent m_IconContent;
 

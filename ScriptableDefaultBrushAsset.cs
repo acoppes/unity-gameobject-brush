@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,15 +11,6 @@ namespace Gemserk.Tools.ObjectPalette
 
         // public int minCount = 1;
         // public int maxCount = 3;
-        
-        [NonSerialized]
-        protected Vector2 position;
-        
-        [NonSerialized]
-        protected readonly List<GameObject> previewInstances = new List<GameObject>();
-
-        [NonSerialized]
-        private Transform previewParent;
 
         public override void UpdatePosition(Vector2 p)
         {
@@ -32,20 +22,7 @@ namespace Gemserk.Tools.ObjectPalette
         public override void CreatePreview(List<GameObject> prefabs)
         {
             DestroyPreview();
-
-            if (previewParent == null)
-            {
-                var brushPreviewObject = new GameObject("~BrushPreview")
-                {
-                    hideFlags = HideFlags.NotEditable, 
-                    tag = "EditorOnly"
-                };
-
-                brushPreviewObject.AddComponent<BrushPreview>();
-                
-                previewParent = brushPreviewObject.transform;
-                previewParent.position = position;
-            }
+            CreateParent();
 
             foreach (var prefab in prefabs)
             {
@@ -62,14 +39,6 @@ namespace Gemserk.Tools.ObjectPalette
                 previewInstances.Add(preview);
 #endif
             }
-        }
-
-        public override void DestroyPreview()
-        {
-            if (previewParent != null)
-                DestroyImmediate(previewParent.gameObject);
-            previewParent = null;
-            previewInstances.Clear();
         }
 
         public override void Paint()
