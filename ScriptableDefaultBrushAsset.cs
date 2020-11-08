@@ -12,13 +12,6 @@ namespace Gemserk.Tools.ObjectPalette
         // public int minCount = 1;
         // public int maxCount = 3;
 
-        public override void UpdatePosition(Vector2 p)
-        {
-            position = p;
-            if (previewParent != null)
-                previewParent.position = p;
-        }
-
         public override void CreatePreview(List<GameObject> prefabs)
         {
             DestroyPreview();

@@ -14,14 +14,24 @@ namespace Gemserk.Tools.ObjectPalette
 
             if (dpi <= 0)
                 return;
+            
+            if (previewParent != null)
+            {
+                RoundToPixelPerfect(previewParent);
+            }
 
             foreach (var previewInstance in previewInstances)
             {
-                var l = previewInstance.transform.localPosition;
-                l.x = Mathf.RoundToInt(l.x * dpi) / (float) dpi;
-                l.y = Mathf.RoundToInt(l.y * dpi) / (float) dpi;
-                previewInstance.transform.localPosition = l;
+                RoundToPixelPerfect(previewInstance.transform);
             }
+        }
+
+        private void RoundToPixelPerfect(Transform t)
+        {
+            var l = t.localPosition;
+            l.x = Mathf.RoundToInt(l.x * dpi) / (float) dpi;
+            l.y = Mathf.RoundToInt(l.y * dpi) / (float) dpi;
+            t.localPosition = l;
         }
     }
 }
