@@ -43,6 +43,7 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
   - ESC key to unselect
   - Visible tools for paint and erase (with icons), with togglable buttons.
   - Configurable modifier key to toggle erase
+  - Sprite assets in palette
 
 ## Licence 
 
