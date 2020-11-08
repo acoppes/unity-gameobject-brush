@@ -50,6 +50,36 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             }
         }
 
+        private class PaletteSelection
+        {
+            public List<PaletteEntry> selection = new List<PaletteEntry>();
+
+            public bool IsEmpty => selection.Count == 0;
+
+            public List<GameObject> SelectedPrefabs
+            {
+                get
+                {
+                    return selection.Select(s => s.prefab).ToList();
+                }
+            }
+
+            public void Clear()
+            {
+                selection.Clear();
+            }
+
+            public bool Contains(PaletteEntry p)
+            {
+                return selection.Contains(p);
+            }
+
+            public void Add(PaletteEntry p)
+            {
+                selection.Add(p);
+            }
+        }
+
         private enum PaletteTool
         {
             Paint,
@@ -65,7 +95,8 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private IBrush brush;
         private int selectedBrushIndex;
-        private PaletteEntry selectedEntry;
+        
+        private PaletteSelection selection = new PaletteSelection();
 
         // TODO: configurable through scriptable object...
         private static readonly float buttonPreviewMinSize = 50;
@@ -150,8 +181,8 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 {
                     currentTool = PaletteTool.Paint;
                     RestoreUnityTool();
-                    if (brush != null && selectedEntry != null)
-                        brush.CreatePreview(new List<GameObject> {selectedEntry.prefab});  
+                    if (brush != null && !selection.IsEmpty)
+                        brush.CreatePreview(selection.SelectedPrefabs);  
                 }
             }
             
@@ -172,9 +203,9 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 currentTool = PaletteTool.Paint;
                 RestoreUnityTool();
             
-                if (brush != null && selectedEntry != null)
+                if (brush != null && !selection.IsEmpty)
                 {
-                    brush.CreatePreview(new List<GameObject>() {selectedEntry.prefab});
+                    brush.CreatePreview(selection.SelectedPrefabs);
                 }
             }
             
@@ -208,13 +239,10 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             {
                 if (currentTool == PaletteTool.Paint)
                 {
-                    if (selectedEntry != null && brush != null)
+                    if (brush != null && !selection.IsEmpty)
                     {
                         brush.Paint();
-                        brush.CreatePreview(new List<GameObject>
-                        {
-                            selectedEntry.prefab
-                        });
+                        brush.CreatePreview(selection.SelectedPrefabs);
                         Event.current.Use();
                     }
                 }
@@ -246,12 +274,10 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private void OnBecameVisible()
         {
             SceneView.duringSceneGui += OnSceneViewGui;
-            if (selectedEntry != null)
+            // Regenerate brush preview if window became visible, if some selection was active
+            if (!selection.IsEmpty)
             {
-                brush?.CreatePreview(new List<GameObject>
-                {
-                    selectedEntry.prefab
-                });
+                brush?.CreatePreview(selection.SelectedPrefabs);
             }
         }
 
@@ -350,7 +376,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     fixedHeight = previewSize.y
                 };
 
-                var isSelected = entry.Equals(selectedEntry);
+                var isSelected = selection.Contains(entry);
 
                 if (GUILayout.Button(previewContent, guiStyle))
                 {
@@ -407,20 +433,14 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private void UnselectPalette()
         {
             brush.DestroyPreview();
-            
-            selectedEntry = null;
+            selection.Clear();
             RestoreUnityTool();
         }
 
         private void SelectBrushObject(PaletteEntry entry)
         {
-            selectedEntry = entry;
-
-            brush.CreatePreview(new List<GameObject>
-            {
-                selectedEntry.prefab
-            });
-
+            selection.Add(entry);
+            brush.CreatePreview(selection.SelectedPrefabs);
             UnselectUnityTool();
         }
 
