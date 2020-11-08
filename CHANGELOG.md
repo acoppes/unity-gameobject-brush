@@ -4,6 +4,9 @@
 
   * Erase tool, for now by clicking while left alt key is pressed
   * Undo for erasing objects.
+  * Visual button to show while erasing is active and to select/unselect erase tool.
+  * Undo for erased objects.
+  * Escape key and mouse right button unselect palette objects.
 
 ## Fixed
 

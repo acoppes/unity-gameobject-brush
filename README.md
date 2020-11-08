@@ -29,8 +29,6 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
 * Erase
   - Filter which objects not to delete (check objects inside root, avoid root, camera, etc)
   - While holding key or while erase selected, highlight the object that is going to be deleted?
-* Undo
-  - After erase painted object.
 * Brushes and paint logic
   - Paint while mouse drag (delay, distance, etc)
   - Random Flip
@@ -40,7 +38,6 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
   - Paint with prefab instance or unpack prefab.
 * Misc
   - Selected entries should be a list (or a concept Selection).
-  - ESC key to unselect
   - Visible tools for paint and erase (with icons), with togglable buttons.
   - Configurable modifier key to toggle erase
   - Sprite assets in palette

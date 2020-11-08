@@ -118,7 +118,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         {
             if (mode == OpenSceneMode.Single)
             {
-                DeselectPaletteEntry();
+                UnselectPalette();
             }
         }
 
@@ -176,6 +176,18 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 {
                     brush.CreatePreview(new List<GameObject>() {selectedEntry.prefab});
                 }
+            }
+            
+            if (Event.current.rawType == EventType.KeyUp && Event.current.keyCode == KeyCode.Escape)
+            {
+                UnselectPalette();
+                Repaint();
+            }
+
+            if (Event.current.rawType == EventType.MouseDown && Event.current.button == 1)
+            {
+                UnselectPalette();
+                Repaint();
             }
             
             // if (selectedEntry == null || brush == null)
@@ -278,6 +290,11 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private void OnGUI()
         {
+            if (Event.current.rawType == EventType.KeyUp && Event.current.keyCode == KeyCode.Escape)
+            {
+                UnselectPalette();
+            }
+            
             GUILayout.BeginVertical();
 
             if (availableBrushes.Count > 0)
@@ -338,10 +355,10 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 if (GUILayout.Button(previewContent, guiStyle))
                 {
                     if (isSelected)
-                        DeselectPaletteEntry();
+                        UnselectPalette();
                     else
                     {
-                        DeselectPaletteEntry();
+                        UnselectPalette();
                         SelectBrushObject(entry);
                     }
                 }
@@ -387,7 +404,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             GUILayout.EndVertical();
         }
 
-        private void DeselectPaletteEntry()
+        private void UnselectPalette()
         {
             brush.DestroyPreview();
             
