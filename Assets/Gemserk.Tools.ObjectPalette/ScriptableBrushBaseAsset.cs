@@ -15,7 +15,13 @@ namespace Gemserk.Tools.ObjectPalette
         [NonSerialized]
         protected Transform previewParent;
         
-        public abstract void UpdatePosition(Vector2 position);
+        public virtual void UpdatePosition(Vector2 p)
+        {
+            position = p;
+            if (previewParent != null)
+                previewParent.position = p;
+        }
+        
         public abstract void CreatePreview(List<GameObject> prefabs);
 
         protected void CreateParent()
