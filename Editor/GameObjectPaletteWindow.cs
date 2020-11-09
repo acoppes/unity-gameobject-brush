@@ -130,11 +130,23 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         {
             windowVisible = true;
 
+            SceneView.beforeSceneGui += OnBeforeSceneGui;
             SceneView.duringSceneGui += OnSceneViewGui;
+            
             // Regenerate brush preview if window became visible, if some selection was active
             if (!PaletteCommon.selection.IsEmpty)
             {
                 PaletteCommon.brush?.CreatePreview(PaletteCommon.selection.SelectedPrefabs);
+            }
+        }
+
+        private void OnBeforeSceneGui(SceneView view)
+        {
+            if (Event.current.type == EventType.ScrollWheel && Event.current.control)
+            {
+                HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+                PaletteCommon.brush.CreatePreview(PaletteCommon.selection.SelectedPrefabs);
+                Event.current.Use();
             }
         }
 
@@ -143,6 +155,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             windowVisible = false;
             
             SceneView.duringSceneGui -= OnSceneViewGui;
+            SceneView.beforeSceneGui -= OnBeforeSceneGui;
             PaletteCommon.brush?.DestroyPreview();
         }
 
