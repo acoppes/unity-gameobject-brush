@@ -2,9 +2,10 @@
 
 ## Added
 
-  * Support for multiselection with shift key pressed.
+  * Support for multi selection with shift key pressed.
   * Added small distribute logic to default brush.
   * New tool in editor window with custom brush icon.
+  * Now dragging while left mouse button pressed will continuously paint.
 
 ## Changed
 
