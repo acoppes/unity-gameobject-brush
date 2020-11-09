@@ -17,7 +17,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         }
 
         private readonly List<PaletteObject> entries = new List<PaletteObject>();
-        private List<ScriptableDefaultBrushAsset> availableBrushes = new List<ScriptableDefaultBrushAsset>();
+        private List<ScriptableBrushBaseAsset> availableBrushes = new List<ScriptableBrushBaseAsset>();
 
         private Vector2 verticalScroll;
         private Tool previousTool;
@@ -43,9 +43,9 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             EditorSceneManager.sceneOpened += OnSceneOpened;
             
             DestroyHangingPreview();
-            
+
             if (PaletteCommon.brush == null)
-                CreateActiveBrush();
+                PaletteCommon.brush = defaultBrush;
         }
 
         private void DestroyHangingPreview()
@@ -78,18 +78,6 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             if (mode == OpenSceneMode.Single)
             {
                 UnselectPalette();
-            }
-        }
-
-        private void CreateActiveBrush()
-        {
-            if (defaultBrush != null)
-            {
-                PaletteCommon.brush = defaultBrush;
-            }
-            else
-            {
-                PaletteCommon.brush = CreateInstance<ScriptableDefaultBrushAsset>();    
             }
         }
 
@@ -201,7 +189,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 });
             }
 
-            availableBrushes = AssetDatabaseExt.FindAssets<ScriptableDefaultBrushAsset>();
+            availableBrushes = AssetDatabaseExt.FindAssets<ScriptableBrushBaseAsset>();
         }
 
         private void OnGUI()
@@ -211,30 +199,10 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 UnselectPalette();
             }
             
-            GUILayout.BeginVertical();
-
-            if (availableBrushes.Count > 0)
-            {
-                var options = new List<string>() {"None"};
-                options.AddRange(availableBrushes.Select(b => b.name));
-                
-                EditorGUI.BeginChangeCheck();
-                selectedBrushIndex = EditorGUILayout.Popup("Brush", selectedBrushIndex, options.ToArray());
-                
-                if (EditorGUI.EndChangeCheck())
-                {
-                    if (selectedBrushIndex == 0)
-                        PaletteCommon.brush = CreateInstance<ScriptableDefaultBrushAsset>();
-                    else
-                        PaletteCommon.brush = availableBrushes[selectedBrushIndex - 1];
-                }
-                
-            }
+            DrawBrushList();
             
             var buttonSize = new Vector2(currentButtonSize, currentButtonSize);
-            
-            GUILayout.EndVertical();
-            
+
             GUILayout.BeginVertical();
                 
             verticalScroll = GUILayout.BeginScrollView(verticalScroll, false, true, 
@@ -327,6 +295,29 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             currentButtonSize = EditorGUILayout.Slider("Preview Size", currentButtonSize, 
                 buttonPreviewMinSize, buttonPreviewMaxSize);
             
+            GUILayout.EndVertical();
+        }
+
+        private void DrawBrushList()
+        {
+            GUILayout.BeginVertical();
+
+            if (availableBrushes.Count > 0)
+            {
+                var options = new List<string>();
+                options.AddRange(availableBrushes.Select(b => b.name));
+
+                selectedBrushIndex = availableBrushes.IndexOf(PaletteCommon.brush as ScriptableBrushBaseAsset);
+                
+                EditorGUI.BeginChangeCheck();
+                selectedBrushIndex = EditorGUILayout.Popup("Brush", selectedBrushIndex, options.ToArray());
+                
+                if (EditorGUI.EndChangeCheck())
+                {
+                    PaletteCommon.brush = availableBrushes[selectedBrushIndex];
+                }
+            }
+
             GUILayout.EndVertical();
         }
 
