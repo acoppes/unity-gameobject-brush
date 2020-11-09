@@ -18,13 +18,6 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
 
 ## Roadmap
 
-### Next
-
-  * Use Unity EditorTool so we can use events in our way.
-    - Can we select our custom tool from our editor window when a palette object is selected?
-
-### Later
-
 * Filters for game objects (decide which objects to show in palette)
   - Customizable (logic)
 * Settings (asset) to configure prefab folders.
