@@ -6,6 +6,7 @@
   * Added small distribute logic to default brush.
   * New tool in editor window with custom brush icon.
   * Now dragging while left mouse button pressed will continuously paint.
+  * Ctrl key + scroll wheel regenerates preview before painting.
 
 ## Changed
 
