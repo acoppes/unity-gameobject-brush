@@ -10,7 +10,8 @@ This tool provides both a GameObject Palette Window and customizable Brushes in 
 
 ## Example 
 
-![Alt text](Images/palette_example.gif?raw=true "Example")
+![Alt text](Images/palette_example.gif?raw=true "Example 1")
+![Alt text](Images/palette_example2.gif?raw=true "Example 2")
 
 ## The assets pack 
 
@@ -31,20 +32,17 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
   - While holding key or while erase selected, highlight the object that is going to be deleted?
   - Bigger "erase" size, now it works one by one and doesn't allow dragging.
 * Brushes and paint logic
-  - Paint while mouse drag (delay, distance, etc)
+  - Drag paint delay and distance to paint.
   - Random Flip
   - Random Size
   - Paint multiple instances, random, distribute in area.
-  - Select more than one prefab at the same time
   - Paint with prefab instance or unpack prefab.
 * Misc
-  - Selected entries should be a list (or a concept Selection).
   - Visible tools for paint and erase (with icons), with togglable buttons.
   - Configurable modifier key to toggle erase
   - Sprite assets in palette
   - Change to use UIElements.
   - User brush override data in editor window.
-  - Refresh preview with mouse wheel up/down (useful if the brush has random modifiers)
   - Maybe add brush modifiers to allow overriding some logic.
     - For example, multiple instances of same prefab (for grass), or random between selected prefabs, etc.
   - Documentation of how to use it and extend.
