@@ -60,7 +60,10 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             
             // TODO: repeat delay/distance.
 
-            if (rawEvent == EventType.MouseDrag)
+            var painting = rawEvent == EventType.MouseDown && Event.current.button == 0;
+            painting = painting || rawEvent == EventType.MouseDrag;
+            
+            if (painting)
             {
                 if (PaletteCommon.mode == PaletteToolMode.Paint)
                 {
