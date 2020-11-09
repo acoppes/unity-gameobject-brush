@@ -47,12 +47,20 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     Event.current.Use();
                 }
             }
+            
 
-            // var isPaintEvent = rawEvent == EventType.MouseDown || rawEvent == EventType.MouseDrag || rawEvent == EventType.MouseMove;
+            // This is used somehow to avoid default scene view controls to consume Event MouseDrag so we 
+            // can use it to paint.
+            if (Event.current.type == EventType.Layout) 
+            {
+                HandleUtility.AddDefaultControl(0);
+            }
+            
+            // Debug.Log($"{Event.current.rawType}, {Event.current.type}");
             
             // TODO: repeat delay/distance.
 
-            if (rawEvent == EventType.MouseDown && Event.current.button == 0)
+            if (rawEvent == EventType.MouseDrag)
             {
                 if (PaletteCommon.mode == PaletteToolMode.Paint)
                 {
