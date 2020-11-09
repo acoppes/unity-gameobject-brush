@@ -124,25 +124,6 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 UnselectPalette();
                 Repaint();
             }
-            
-            // if (selectedEntry == null || brush == null)
-            //     return;
-            
-            var p = Event.current.mousePosition;
-            // currentBrush.transform.position = p;
-            
-            var ray = HandleUtility.GUIPointToWorldRay(p);
-            var position = ray.origin;
-            position.z = 0;
-            PaletteCommon.brush.UpdatePosition(position);
-            
-            // currentBrush.transform.position = position;
-            // Handles.DrawLine(btn.transform.position + Vector3.up, mousePosition);
-
-            var rawEvent = Event.current.rawType;
-            // var isPaintEvent = rawEvent == EventType.MouseDown || rawEvent == EventType.MouseDrag || rawEvent == EventType.MouseMove;
-            
-
         }
         
         private void OnBecameVisible()
