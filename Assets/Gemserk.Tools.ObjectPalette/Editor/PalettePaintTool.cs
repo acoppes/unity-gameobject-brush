@@ -78,7 +78,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 GUIUtility.hotControl = GUIUtility.GetControlID(FocusType.Passive);
             }
 
-            Debug.Log($"{Event.current.rawType}, {Event.current.type}");
+            // Debug.Log($"{Event.current.rawType}, {Event.current.type}");
             
             // TODO: repeat delay/distance.
 
