@@ -6,31 +6,23 @@ namespace Gemserk.Tools.ObjectPalette
     [CreateAssetMenu(menuName = "Object Palette/Default Brush")]
     public class ScriptableDefaultBrushAsset : ScriptableBrushBaseAsset
     {
-        public float minDistributionOffset = 0.0f;
-        public float maxDistributionOffset = 1.0f;
-
-        // public int minCount = 1;
-        // public int maxCount = 3;
-
         public override void CreatePreview(List<GameObject> prefabs)
         {
             DestroyPreview();
             CreateParent();
-
+            
             foreach (var prefab in prefabs)
             {
 #if UNITY_EDITOR
-                var offset = Vector2.zero; 
-                if (prefabs.Count > 1)
-                {
-                    var len = UnityEngine.Random.Range(minDistributionOffset, maxDistributionOffset);
-                    var angle = UnityEngine.Random.Range(0, 360);
-                    offset = Quaternion.Euler(0, 0, angle) * new Vector3(len, 0, 0);
-                }
                 var preview = UnityEditor.PrefabUtility.InstantiatePrefab(prefab, previewParent) as GameObject;
-                preview.transform.localPosition = offset;
+                preview.transform.localPosition = Vector2.zero;
                 previewInstances.Add(preview);
 #endif
+            }
+
+            foreach (var modifier in modifiers)
+            {
+                modifier.ApplyModifier(this);
             }
         }
 

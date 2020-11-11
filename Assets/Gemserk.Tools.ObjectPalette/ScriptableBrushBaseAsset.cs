@@ -7,13 +7,16 @@ namespace Gemserk.Tools.ObjectPalette
     public abstract class ScriptableBrushBaseAsset : ScriptableObject, IBrush
     {
         [NonSerialized]
-        protected Vector2 position;
+        public Vector2 position;
         
         [NonSerialized]
-        protected readonly List<GameObject> previewInstances = new List<GameObject>();
+        public readonly List<GameObject> previewInstances = new List<GameObject>();
 
         [NonSerialized]
-        protected Transform previewParent;
+        public Transform previewParent;
+        
+        [SerializeField]
+        protected List<BrushModifierAsset> modifiers = new List<BrushModifierAsset>();
         
         public virtual void UpdatePosition(Vector2 p)
         {
