@@ -23,6 +23,11 @@ namespace Gemserk.Tools.ObjectPalette
             position = p;
             if (previewParent != null)
                 previewParent.position = p;
+            
+            foreach (var modifier in modifiers)
+            {
+                modifier.UpdatePosition(this);
+            }
         }
         
         public abstract void CreatePreview(List<GameObject> prefabs);

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d69ee80f2ba4d6589d98d9cdc678667, type: 3}
   m_Name: DefaultDistributeModifier
   m_EditorClassIdentifier: 
-  minDistributionOffset: 0
+  minDistributionOffset: 0.15
   maxDistributionOffset: 1
