@@ -7,6 +7,7 @@
   * New tool in editor window with custom brush icon.
   * Now dragging while left mouse button pressed will continuously paint.
   * Ctrl key + scroll wheel regenerates preview before painting.
+  * Added optional brush modifiers that can be applied in order to modify the brush.
 
 ## Changed
 
