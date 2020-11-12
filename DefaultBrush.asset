@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: DefaultBrush
   m_EditorClassIdentifier: 
   modifiers:
+  - {fileID: 11400000, guid: 19268d86542938441b9891fe775fac14, type: 2}
   - {fileID: 11400000, guid: 334ce005f8e15ae458c19fbb762c1297, type: 2}
   - {fileID: 11400000, guid: a8db247ddf44dd841aab853ff255e900, type: 2}
