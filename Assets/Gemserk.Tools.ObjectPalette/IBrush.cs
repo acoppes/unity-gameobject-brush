@@ -12,5 +12,10 @@ namespace Gemserk.Tools.ObjectPalette
         void DestroyPreview();
 
         void Paint();
+
+        bool RegenerateOnPaint
+        {
+            get;
+        }
     }
 }
