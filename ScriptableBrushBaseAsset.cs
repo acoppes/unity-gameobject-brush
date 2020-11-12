@@ -9,8 +9,19 @@ namespace Gemserk.Tools.ObjectPalette
         [NonSerialized]
         public Vector2 position;
         
-        [NonSerialized]
-        public readonly List<GameObject> previewInstances = new List<GameObject>();
+        // [NonSerialized]
+        public List<GameObject> previewInstances
+        {
+            get
+            {
+                var list = new List<GameObject>();
+                for (var i = 0; i < previewParent.childCount; i++)
+                {
+                    list.Add(previewParent.GetChild(i).gameObject);
+                }
+                return list;
+            }
+        }
 
         [NonSerialized]
         public Transform previewParent;
@@ -53,7 +64,6 @@ namespace Gemserk.Tools.ObjectPalette
             if (previewParent != null)
                 DestroyImmediate(previewParent.gameObject);
             previewParent = null;
-            previewInstances.Clear();
         }
         
         public abstract void Paint();

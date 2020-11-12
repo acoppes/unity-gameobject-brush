@@ -16,7 +16,6 @@ namespace Gemserk.Tools.ObjectPalette
 #if UNITY_EDITOR
                 var preview = UnityEditor.PrefabUtility.InstantiatePrefab(prefab, previewParent) as GameObject;
                 preview.transform.localPosition = Vector2.zero;
-                previewInstances.Add(preview);
 #endif
             }
 
@@ -28,14 +27,19 @@ namespace Gemserk.Tools.ObjectPalette
 
         public override void Paint()
         {
-            foreach (var previewInstance in previewInstances)
+            var transforms = new List<Transform>();
+            for (var i = 0; i < previewParent.childCount; i++)
             {
-                previewInstance.transform.parent = previewParent.parent;
+                transforms.Add(previewParent.GetChild(i));
+            }
+            
+            foreach (var t in transforms)
+            {
+                t.parent = previewParent.parent;
                 #if UNITY_EDITOR
-                UnityEditor.Undo.RegisterCreatedObjectUndo (previewInstance, "Painted");
+                UnityEditor.Undo.RegisterCreatedObjectUndo (t.gameObject, "Painted");
                 #endif
             }
-            previewInstances.Clear();
         }
     }
 }
