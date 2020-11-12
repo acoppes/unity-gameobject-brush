@@ -10,20 +10,18 @@ namespace Gemserk.Tools.ObjectPalette
         
         public override void ApplyModifier(ScriptableBrushBaseAsset brush)
         {
-            var previewInstances = brush.previewInstances;
+            var previewParent = brush.previewParent;
+
+            if (previewParent.childCount <= 1)
+                return;
             
-            if (previewInstances.Count > 1)
+            for (var i = 0; i < previewParent.childCount; i++)
             {
-                var offset = Vector2.zero; 
-
-                foreach (var previewInstance in previewInstances)
-                {
-                    var len = UnityEngine.Random.Range(minDistributionOffset, maxDistributionOffset);
-                    var angle = UnityEngine.Random.Range(0, 360);
-                    offset = Quaternion.Euler(0, 0, angle) * new Vector3(len, 0, 0);
-                    previewInstance.transform.localPosition = offset;
-                }
-
+                var t = previewParent.GetChild(i);
+                var len = UnityEngine.Random.Range(minDistributionOffset, maxDistributionOffset);
+                var angle = UnityEngine.Random.Range(0, 360);
+                var offset = Quaternion.Euler(0, 0, angle) * new Vector3(len, 0, 0);
+                t.localPosition = offset;
             }
         }
     }

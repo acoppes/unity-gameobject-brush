@@ -43,10 +43,9 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
   - Sprite assets in palette
   - Change to use UIElements.
   - User brush override data in editor window.
-  - Maybe add brush modifiers to allow overriding some logic.
-    - For example, multiple instances of same prefab (for grass), or random between selected prefabs, etc.
   - Documentation of how to use it and extend.
   - Maybe brushes should be GameObjects to support custom modifiers as components.
+  - Pick scene and root to paint to.
 
 ## Licence 
 
