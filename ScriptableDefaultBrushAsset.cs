@@ -27,18 +27,23 @@ namespace Gemserk.Tools.ObjectPalette
 
         public override void Paint()
         {
-            var transforms = new List<Transform>();
-            for (var i = 0; i < previewParent.childCount; i++)
+            foreach (var previewInstance in previewInstances)
             {
-                transforms.Add(previewParent.GetChild(i));
-            }
-            
-            foreach (var t in transforms)
-            {
-                t.parent = previewParent.parent;
-                #if UNITY_EDITOR
-                UnityEditor.Undo.RegisterCreatedObjectUndo (t.gameObject, "Painted");
-                #endif
+                
+#if UNITY_EDITOR
+                var prefabRoot = UnityEditor.PrefabUtility.GetPrefabParent (previewInstance);
+         
+                if (prefabRoot != null)
+                {
+                    var paintedObject = UnityEditor.PrefabUtility.InstantiatePrefab(prefabRoot, previewParent.parent) 
+                        as GameObject;
+                    paintedObject.transform.position = previewInstance.transform.position;
+                    UnityEditor.Undo.RegisterCreatedObjectUndo (paintedObject, "Painted");
+                }
+#else
+                Instantiate (previewInstance, previewParent.parent);
+                paintedObject.transform.position = previewInstance.transform.position;
+#endif
             }
         }
     }

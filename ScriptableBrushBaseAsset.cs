@@ -6,9 +6,13 @@ namespace Gemserk.Tools.ObjectPalette
 {
     public abstract class ScriptableBrushBaseAsset : ScriptableObject, IBrush
     {
+        public bool regenerateOnPaint = false;
+        
+        public bool RegenerateOnPaint => regenerateOnPaint;
+        
         [NonSerialized]
         public Vector2 position;
-        
+
         // [NonSerialized]
         public List<GameObject> previewInstances
         {

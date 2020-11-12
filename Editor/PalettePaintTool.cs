@@ -102,7 +102,8 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     if (PaletteCommon.brush != null && !PaletteCommon.selection.IsEmpty)
                     {
                         PaletteCommon.brush.Paint();
-                        PaletteCommon.brush.CreatePreview(PaletteCommon.selection.SelectedPrefabs);
+                        if (PaletteCommon.brush.RegenerateOnPaint) 
+                            PaletteCommon.brush.CreatePreview(PaletteCommon.selection.SelectedPrefabs);
                         Event.current.Use();
                     }
                 }
