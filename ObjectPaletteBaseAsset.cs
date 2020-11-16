@@ -5,6 +5,6 @@ namespace Gemserk.Tools.ObjectPalette
 {
     public abstract class ObjectPaletteBaseAsset : ScriptableObject
     {
-        public abstract List<GameObject> GetObjects();
+        public abstract List<PaletteObject> CreatePaletteObjects();
     }
 }

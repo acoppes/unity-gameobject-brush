@@ -9,10 +9,9 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 {
     public class GameObjectPaletteWindow : EditorWindow
     {
-        public class Palette
+        public class SelectedPalette
         {
-            public readonly List<PaletteObject> cachedEntries = new List<PaletteObject>();
-            public bool cached = false;
+            public List<PaletteObject> cachedEntries;
         }
         
         [MenuItem("Window/Object Palette/Palette Window")]
@@ -23,7 +22,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         }
 
         private List<ObjectPaletteBaseAsset> availablePalettes;
-        private Palette selectedPalette = new Palette();
+        private SelectedPalette _selectedSelectedPalette = new SelectedPalette();
         
         private List<ScriptableBrushBaseAsset> availableBrushes = new List<ScriptableBrushBaseAsset>();
 
@@ -179,30 +178,17 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             availableBrushes = AssetDatabaseExt.FindAssets<ScriptableBrushBaseAsset>();
         }
 
-        private void ReloadPalette2()
+        private void ReloadSelectedPalette()
         {
             var palette = availablePalettes[selectedPaletteIndex];
 
-            var objects = palette.GetObjects();
-
+            // var objects = palette.CreatePaletteObjects();
             // var objects = AssetDatabaseExt.FindPrefabs<Renderer>(AssetDatabaseExt.FindOptions.ConsiderChildren, new []
             // {
             //     "Assets"
             // });
 
-            selectedPalette.cachedEntries.Clear();
-            
-            foreach (var obj in objects)
-            {
-                selectedPalette.cachedEntries.Add(new PaletteObject
-                {
-                    name = obj.name,
-                    prefab = obj,
-                    preview = AssetPreview.GetAssetPreview(obj)
-                });
-            } 
-
-
+            _selectedSelectedPalette.cachedEntries = palette.CreatePaletteObjects();
         }
 
         private void OnGUI()
@@ -218,7 +204,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             if (availablePalettes.Count == 0)
                 return;
 
-            ReloadPalette2();
+            ReloadSelectedPalette();
             
             var buttonSize = new Vector2(currentButtonSize, currentButtonSize);
 
@@ -238,7 +224,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
             var multiselection = Event.current.shift;
 
-            foreach (var entry in selectedPalette.cachedEntries)
+            foreach (var entry in _selectedSelectedPalette.cachedEntries)
             {
                 var previewSize = buttonSize;
 
@@ -331,9 +317,8 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 
                 if (EditorGUI.EndChangeCheck())
                 {
-                    // PaletteCommon.brush = availableBrushes[selectedBrushIndex];
-                    // Regenerate the selected palette here...
-                    selectedPalette.cached = false;
+                    // Nullify cached entires to force regenerate selected palette.
+                    _selectedSelectedPalette.cachedEntries = null;
                 }
             }
             else
