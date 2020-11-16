@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Gemserk.Tools.ObjectPalette
@@ -8,9 +9,18 @@ namespace Gemserk.Tools.ObjectPalette
     {
         public List<GameObject> prefabs;
         
-        public override List<GameObject> GetObjects()
+        public override List<PaletteObject> CreatePaletteObjects()
         {
-            return prefabs;
+            #if UNITY_EDITOR
+            return prefabs.Select(p => new PaletteObject
+            {
+                name = p.name,
+                prefab = p,
+                preview = UnityEditor.AssetPreview.GetAssetPreview(p)
+            }).ToList();
+            #else
+            return null;
+            #endif
         }
     }
 }
