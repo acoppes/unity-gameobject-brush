@@ -3,6 +3,7 @@
 ## Added
 
   * Custom palette as asset, for now add interesting objects manually to that pallette or implement a custom logic.
+  * Support for custom non prefab palettes.
 
 # 0.0.5
 
