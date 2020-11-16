@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace Gemserk.Tools.ObjectPalette
@@ -6,8 +7,26 @@ namespace Gemserk.Tools.ObjectPalette
     public class PaletteObject : IEquatable<PaletteObject>
     {
         public string name;
-        public GameObject prefab;
+        public UnityEngine.Object sourceObject;
         public Texture preview;
+
+        public GameObject Instantiate()
+        {
+            if (sourceObject is GameObject)
+            {
+                return PrefabUtility.InstantiatePrefab(sourceObject) as GameObject; 
+            } 
+            
+            if (sourceObject is Sprite sprite)
+            {
+                var go = new GameObject(sprite.name);
+                var spriteRenderer = go.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = sprite;
+                return go;
+            }
+            
+            return null;
+        }
 
         public override bool Equals(object obj)
         {
@@ -21,7 +40,7 @@ namespace Gemserk.Tools.ObjectPalette
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return name == other.name && Equals(prefab, other.prefab) && Equals(preview, other.preview);
+            return name == other.name && Equals(sourceObject, other.sourceObject) && Equals(preview, other.preview);
         }
 
         public override int GetHashCode()
@@ -29,7 +48,7 @@ namespace Gemserk.Tools.ObjectPalette
             unchecked
             {
                 var hashCode = (name != null ? name.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (prefab != null ? prefab.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (sourceObject != null ? sourceObject.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (preview != null ? preview.GetHashCode() : 0);
                 return hashCode;
             }

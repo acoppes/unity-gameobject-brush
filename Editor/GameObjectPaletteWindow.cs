@@ -267,7 +267,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 if (entry.preview == null)
                 {
                     // If preview was unloaded by unity, regenerate it
-                    entry.preview = AssetPreview.GetAssetPreview(entry.prefab);
+                    entry.preview = AssetPreview.GetAssetPreview(entry.sourceObject);
                 }
 
                 // var smallerRect = new Rect(r.x, r.y, r.width * 0.5f, r.height * 0.5f);

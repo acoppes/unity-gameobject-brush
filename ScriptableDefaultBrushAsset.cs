@@ -14,7 +14,8 @@ namespace Gemserk.Tools.ObjectPalette
             foreach (var paletteObject in paletteObjects)
             {
 #if UNITY_EDITOR
-                var preview = UnityEditor.PrefabUtility.InstantiatePrefab(paletteObject.prefab, previewParent) as GameObject;
+                var preview = paletteObject.Instantiate();
+                preview.transform.parent = previewParent;
                 preview.transform.localPosition = Vector2.zero;
 #endif
             }
@@ -39,6 +40,13 @@ namespace Gemserk.Tools.ObjectPalette
                         as GameObject;
                     paintedObject.transform.position = previewInstance.transform.position;
                     UnityEditor.Undo.RegisterCreatedObjectUndo (paintedObject, "Painted");
+                }
+                else
+                {
+                    var paintedObject = GameObject.Instantiate(previewInstance);
+                    paintedObject.transform.parent = previewParent.parent;
+                    paintedObject.transform.position = previewInstance.transform.position;
+                    UnityEditor.Undo.RegisterCreatedObjectUndo(paintedObject, "Painted");
                 }
 #else
                 Instantiate (previewInstance, previewParent.parent);

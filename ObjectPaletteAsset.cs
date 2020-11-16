@@ -15,7 +15,7 @@ namespace Gemserk.Tools.ObjectPalette
             return prefabs.Select(p => new PaletteObject
             {
                 name = p.name,
-                prefab = p,
+                sourceObject = p,
                 preview = UnityEditor.AssetPreview.GetAssetPreview(p)
             }).ToList();
             #else
