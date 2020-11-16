@@ -45,7 +45,7 @@ namespace Gemserk.Tools.ObjectPalette
             }
         }
         
-        public abstract void CreatePreview(List<GameObject> prefabs);
+        public abstract void CreatePreview(IEnumerable<PaletteObject> paletteObjects);
 
         protected void CreateParent()
         {

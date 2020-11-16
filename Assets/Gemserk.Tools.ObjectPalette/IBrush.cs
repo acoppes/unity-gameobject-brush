@@ -7,7 +7,7 @@ namespace Gemserk.Tools.ObjectPalette
     {
         void UpdatePosition(Vector2 position);
         
-        void CreatePreview(List<GameObject> prefabs);
+        void CreatePreview(IEnumerable<PaletteObject> paletteObjects);
 
         void DestroyPreview();
 

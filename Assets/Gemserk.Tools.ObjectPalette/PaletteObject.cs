@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Gemserk.Tools.ObjectPalette.Editor
+namespace Gemserk.Tools.ObjectPalette
 {
     public class PaletteObject : IEquatable<PaletteObject>
     {
