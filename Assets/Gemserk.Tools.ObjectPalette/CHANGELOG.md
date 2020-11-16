@@ -1,6 +1,8 @@
 # 0.0.7
 
+## Added
 
+  * Custom palette as asset, for now add interesting objects manually to that pallette or implement a custom logic.
 
 # 0.0.5
 

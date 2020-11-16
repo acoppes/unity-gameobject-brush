@@ -9,6 +9,12 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 {
     public class GameObjectPaletteWindow : EditorWindow
     {
+        public class Palette
+        {
+            public readonly List<PaletteObject> cachedEntries = new List<PaletteObject>();
+            public bool cached = false;
+        }
+        
         [MenuItem("Window/Object Palette/Palette Window")]
         public static void OpenWindow()
         {
@@ -16,13 +22,16 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             window.minSize = new Vector2(300, 300);
         }
 
-        private readonly List<PaletteObject> entries = new List<PaletteObject>();
+        private List<ObjectPaletteBaseAsset> availablePalettes;
+        private Palette selectedPalette = new Palette();
+        
         private List<ScriptableBrushBaseAsset> availableBrushes = new List<ScriptableBrushBaseAsset>();
 
         private Vector2 verticalScroll;
         private Tool previousTool;
 
         private int selectedBrushIndex;
+        private int selectedPaletteIndex;
         
         public static bool windowVisible = false;
 
@@ -37,7 +46,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private void OnEnable()
         {
-            ReloadPalette();
+            ReloadPalettesAndBrushes();
             
             // SceneView.duringSceneGui += DuringSceneView;
             EditorSceneManager.sceneOpened += OnSceneOpened;
@@ -161,29 +170,39 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private void OnFocus()
         {
-            ReloadPalette();
+            ReloadPalettesAndBrushes();
         }
 
-        private void ReloadPalette()
+        private void ReloadPalettesAndBrushes()
         {
-            var objects = AssetDatabaseExt.FindPrefabs<Renderer>(AssetDatabaseExt.FindOptions.ConsiderChildren, new []
-            {
-                "Assets"
-            });
+            availablePalettes = AssetDatabaseExt.FindAssets<ObjectPaletteBaseAsset>();
+            availableBrushes = AssetDatabaseExt.FindAssets<ScriptableBrushBaseAsset>();
+        }
 
-            entries.Clear();
+        private void ReloadPalette2()
+        {
+            var palette = availablePalettes[selectedPaletteIndex];
+
+            var objects = palette.GetObjects();
+
+            // var objects = AssetDatabaseExt.FindPrefabs<Renderer>(AssetDatabaseExt.FindOptions.ConsiderChildren, new []
+            // {
+            //     "Assets"
+            // });
+
+            selectedPalette.cachedEntries.Clear();
             
             foreach (var obj in objects)
             {
-                entries.Add(new PaletteObject
+                selectedPalette.cachedEntries.Add(new PaletteObject
                 {
                     name = obj.name,
                     prefab = obj,
                     preview = AssetPreview.GetAssetPreview(obj)
                 });
-            }
+            } 
 
-            availableBrushes = AssetDatabaseExt.FindAssets<ScriptableBrushBaseAsset>();
+
         }
 
         private void OnGUI()
@@ -194,6 +213,12 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             }
             
             DrawBrushList();
+            DrawPaletteList();
+
+            if (availablePalettes.Count == 0)
+                return;
+
+            ReloadPalette2();
             
             var buttonSize = new Vector2(currentButtonSize, currentButtonSize);
 
@@ -213,7 +238,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
             var multiselection = Event.current.shift;
 
-            foreach (var entry in entries)
+            foreach (var entry in selectedPalette.cachedEntries)
             {
                 var previewSize = buttonSize;
 
@@ -289,6 +314,33 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             currentButtonSize = EditorGUILayout.Slider("Preview Size", currentButtonSize, 
                 buttonPreviewMinSize, buttonPreviewMaxSize);
             
+            GUILayout.EndVertical();
+        }
+        
+        private void DrawPaletteList()
+        {
+            GUILayout.BeginVertical();
+
+            if (availablePalettes.Count > 0)
+            {
+                var options = new List<string>();
+                options.AddRange(availablePalettes.Select(b => b.name));
+
+                EditorGUI.BeginChangeCheck();
+                selectedPaletteIndex = EditorGUILayout.Popup("Palette", selectedPaletteIndex, options.ToArray());
+                
+                if (EditorGUI.EndChangeCheck())
+                {
+                    // PaletteCommon.brush = availableBrushes[selectedBrushIndex];
+                    // Regenerate the selected palette here...
+                    selectedPalette.cached = false;
+                }
+            }
+            else
+            {
+                GUILayout.Label("No palettes found");
+            }
+
             GUILayout.EndVertical();
         }
 
