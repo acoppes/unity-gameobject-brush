@@ -57,7 +57,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                 {
                     PaletteCommon.mode = PaletteToolMode.Paint;
                     if (PaletteCommon.brush != null && !PaletteCommon.selection.IsEmpty)
-                        PaletteCommon.brush.CreatePreview(PaletteCommon.selection.SelectedPrefabs);
+                        PaletteCommon.brush.CreatePreview(PaletteCommon.selection.selection);
                     Event.current.Use();
                 }
             }
@@ -103,7 +103,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     {
                         PaletteCommon.brush.Paint();
                         if (PaletteCommon.brush.RegenerateOnPaint) 
-                            PaletteCommon.brush.CreatePreview(PaletteCommon.selection.SelectedPrefabs);
+                            PaletteCommon.brush.CreatePreview(PaletteCommon.selection.selection);
                         Event.current.Use();
                     }
                 }

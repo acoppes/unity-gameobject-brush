@@ -20,7 +20,7 @@ namespace Gemserk.Tools.ObjectPalette
                 for (var i = 0; i < count; i++)
                 {
                     #if UNITY_EDITOR
-                    var prefabRoot = UnityEditor.PrefabUtility.GetPrefabParent (previewInstance);
+                    var prefabRoot = UnityEditor.PrefabUtility.GetCorrespondingObjectFromSource(previewInstance);
          
                     if (prefabRoot != null)
                         UnityEditor.PrefabUtility.InstantiatePrefab (prefabRoot, previewInstance.transform.parent);

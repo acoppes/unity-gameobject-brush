@@ -1,22 +1,12 @@
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 namespace Gemserk.Tools.ObjectPalette.Editor
 {
     public class PaletteSelection
     {
-        public List<PaletteObject> selection = new List<PaletteObject>();
+        public readonly List<PaletteObject> selection = new List<PaletteObject>();
 
         public bool IsEmpty => selection.Count == 0;
-
-        public List<GameObject> SelectedPrefabs
-        {
-            get
-            {
-                return selection.Select(s => s.prefab).ToList();
-            }
-        }
 
         public void Clear()
         {

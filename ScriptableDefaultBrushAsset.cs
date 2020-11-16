@@ -6,15 +6,15 @@ namespace Gemserk.Tools.ObjectPalette
     [CreateAssetMenu(menuName = "Object Palette/Default Brush")]
     public class ScriptableDefaultBrushAsset : ScriptableBrushBaseAsset
     {
-        public override void CreatePreview(List<GameObject> prefabs)
+        public override void CreatePreview(IEnumerable<PaletteObject> paletteObjects)
         {
             DestroyPreview();
             CreateParent();
             
-            foreach (var prefab in prefabs)
+            foreach (var paletteObject in paletteObjects)
             {
 #if UNITY_EDITOR
-                var preview = UnityEditor.PrefabUtility.InstantiatePrefab(prefab, previewParent) as GameObject;
+                var preview = UnityEditor.PrefabUtility.InstantiatePrefab(paletteObject.prefab, previewParent) as GameObject;
                 preview.transform.localPosition = Vector2.zero;
 #endif
             }
@@ -31,7 +31,7 @@ namespace Gemserk.Tools.ObjectPalette
             {
                 
 #if UNITY_EDITOR
-                var prefabRoot = UnityEditor.PrefabUtility.GetPrefabParent (previewInstance);
+                var prefabRoot = UnityEditor.PrefabUtility.GetCorrespondingObjectFromSource(previewInstance);
          
                 if (prefabRoot != null)
                 {

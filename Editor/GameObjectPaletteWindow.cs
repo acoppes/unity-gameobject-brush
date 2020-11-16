@@ -114,7 +114,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
                     PaletteCommon.mode = PaletteToolMode.Paint;
                     RestoreUnityTool();
                     if (PaletteCommon.brush != null && !PaletteCommon.selection.IsEmpty)
-                        PaletteCommon.brush.CreatePreview(PaletteCommon.selection.SelectedPrefabs);  
+                        PaletteCommon.brush.CreatePreview(PaletteCommon.selection);  
                 }
             }
             
@@ -145,7 +145,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             // Regenerate brush preview if window became visible, if some selection was active
             if (!PaletteCommon.selection.IsEmpty)
             {
-                PaletteCommon.brush?.CreatePreview(PaletteCommon.selection.SelectedPrefabs);
+                PaletteCommon.brush?.CreatePreview(PaletteCommon.selection.selection);
             }
         }
 
@@ -154,7 +154,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
             if (Event.current.type == EventType.ScrollWheel && Event.current.control)
             {
                 HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
-                PaletteCommon.brush.CreatePreview(PaletteCommon.selection.SelectedPrefabs);
+                PaletteCommon.brush.CreatePreview(PaletteCommon.selection.selection);
                 Event.current.Use();
             }
         }
@@ -377,7 +377,7 @@ namespace Gemserk.Tools.ObjectPalette.Editor
         private void SelectBrushObject(PaletteObject o)
         {
             PaletteCommon.selection.Add(o);
-            PaletteCommon.brush.CreatePreview(PaletteCommon.selection.SelectedPrefabs);
+            PaletteCommon.brush.CreatePreview(PaletteCommon.selection.selection);
             UnselectUnityTool();
         }
 
