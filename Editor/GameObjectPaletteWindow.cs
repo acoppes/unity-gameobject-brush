@@ -226,6 +226,9 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
             foreach (var entry in _selectedSelectedPalette.cachedEntries)
             {
+                if (entry == null)
+                    continue;
+
                 var previewSize = buttonSize;
 
                 var previewContent = new GUIContent

@@ -3,7 +3,7 @@
 ## Added
 
   * Custom palette as asset, for now add interesting objects manually to that pallette or implement a custom logic.
-  * Support for custom non prefab palettes.
+  * Support for custom non prefab palettes, added sprites palette asset.
 
 # 0.0.5
 
