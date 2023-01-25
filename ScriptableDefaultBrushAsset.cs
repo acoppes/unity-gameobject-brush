@@ -49,7 +49,7 @@ namespace Gemserk.Tools.ObjectPalette
                     UnityEditor.Undo.RegisterCreatedObjectUndo(paintedObject, "Painted");
                 }
 #else
-                Instantiate (previewInstance, previewParent.parent);
+                var paintedObject = Instantiate (previewInstance, previewParent.parent);
                 paintedObject.transform.position = previewInstance.transform.position;
 #endif
             }
