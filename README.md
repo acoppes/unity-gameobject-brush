@@ -46,7 +46,12 @@ We are using the https://bakudas.itch.io/generic-rpg-pack asset pack, right now 
   - Documentation of how to use it and extend.
   - Maybe brushes should be GameObjects to support custom modifiers as components.
   - Pick scene and root to paint to.
-  - Don't regenerate preview on paint, keep last one.
+  - Paint 3d objects too?
+
+## Known Issues
+
+* Using asset preview in palette has a limit and objects keep losing the preview.
+* First time a Palette is created prefabs list is null and throws some errors.
 
 ## Licence 
 

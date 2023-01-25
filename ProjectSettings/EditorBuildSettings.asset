@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/EraseScene1.unity
+    guid: 4dbb5ad6e11285f46bde0641f5424744
   m_configObjects: {}

@@ -371,16 +371,16 @@ namespace Gemserk.Tools.ObjectPalette.Editor
 
         private void UnselectUnityTool()
         {
-            var type = UnityEditor.EditorTools.EditorTools.activeToolType;
+            var type = UnityEditor.EditorTools.ToolManager.activeToolType;
             if (type != typeof(PalettePaintTool))
-                UnityEditor.EditorTools.EditorTools.SetActiveTool<PalettePaintTool>();
+                UnityEditor.EditorTools.ToolManager.SetActiveTool<PalettePaintTool>();
         }
 
         public void RestoreUnityTool()
         {
-            var type = UnityEditor.EditorTools.EditorTools.activeToolType;
+            var type = UnityEditor.EditorTools.ToolManager.activeToolType;
             if (type == typeof(PalettePaintTool))
-                UnityEditor.EditorTools.EditorTools.RestorePreviousTool();
+                UnityEditor.EditorTools.ToolManager.RestorePreviousTool();
         }
     }
 }

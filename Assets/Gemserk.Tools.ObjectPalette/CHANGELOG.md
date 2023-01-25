@@ -5,6 +5,10 @@
   * Custom palette as asset, for now add interesting objects manually to that pallette or implement a custom logic.
   * Support for custom non prefab palettes, added sprites palette asset.
 
+## Changed
+
+  * Paint doesn't automatically regenerate preview (optional).
+
 # 0.0.5
 
 ## Added
