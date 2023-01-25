@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 
 namespace Gemserk.Tools.ObjectPalette
@@ -14,7 +13,11 @@ namespace Gemserk.Tools.ObjectPalette
         {
             if (sourceObject is GameObject)
             {
-                return PrefabUtility.InstantiatePrefab(sourceObject) as GameObject; 
+                #if UNITY_EDITOR
+                return UnityEditor.PrefabUtility.InstantiatePrefab(sourceObject) as GameObject;
+                #else
+                return null;
+                #endif
             } 
             
             if (sourceObject is Sprite sprite)

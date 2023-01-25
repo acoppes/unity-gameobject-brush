@@ -1,3 +1,7 @@
+# 0.0.9
+
+ * Fixed bug referencing UnityEditor on builds
+
 # 0.0.7
 
 ## Added
